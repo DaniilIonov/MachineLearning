@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace MachineLearning.Classes
+namespace MachineLearning
 {
     /// <summary>
     /// Represents a collection of <see cref="Species"/>. Contains methods and properties to evolve array of <see cref="Species"/> to maximize the <see cref="Species.Fitness"/> value.
