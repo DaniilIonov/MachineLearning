@@ -1,0 +1,120 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
+  <Class Name="MachineLearning.ExtensionMethods">
+    <Position X="0.5" Y="0.5" Width="6.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAA=</HashCode>
+      <FileName>Classes\ExtensionMethods.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MachineLearning.IOList">
+    <Position X="18" Y="0.5" Width="3.75" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAAAAAEAAAAAAQAAAAAAAAAAAAAAAAAEAA=</HashCode>
+      <FileName>Classes\IOList.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MachineLearning.FullyConnectedLayer" BaseTypeListCollapsed="true">
+    <Position X="7.5" Y="3.5" Width="10.25" />
+    <TypeIdentifier>
+      <HashCode>JIAAEAIAEAQAAAEAAAAAAgAAEAAAAAAAAEAAACAAABA=</HashCode>
+      <FileName>Classes\NeuralLayers.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="MachineLearning.NeuralNetwork">
+    <Position X="7.5" Y="8.25" Width="6.5" />
+    <TypeIdentifier>
+      <HashCode>AIAgEAAAAAAAAAAEAAAAAgCAQAABEAAEAgAAQCAAABA=</HashCode>
+      <FileName>Classes\NeuralNetwork.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="MachineLearning.Population&lt;T&gt;" BaseTypeListCollapsed="true">
+    <Position X="18" Y="6.75" Width="7.25" />
+    <TypeIdentifier>
+      <HashCode>ABEAQAAAACAIgEAEIARGAAACCIAiAAAAggAEQAgAAAU=</HashCode>
+      <FileName>Classes\Population.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="MachineLearning.Species">
+    <Position X="8.25" Y="15" Width="5" />
+    <TypeIdentifier>
+      <HashCode>AAAkAAAAAAAAAAAEEAAAAAAAAAEAAAAAAAAAAAAAABA=</HashCode>
+      <FileName>Classes\Species.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="MachineLearning.ThreadSafeRandom">
+    <Position X="0.5" Y="14" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AgBAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAACAA=</HashCode>
+      <FileName>Classes\ThreadSafeRandom.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MachineLearning.Utilities">
+    <Position X="0.5" Y="2" Width="6.25" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Enum Name="MachineLearning.Utilities.MutationType">
+        <TypeIdentifier>
+          <NewMemberFileName>Classes\Utilities.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="MachineLearning.Utilities.CrossoverType">
+        <TypeIdentifier>
+          <NewMemberFileName>Classes\Utilities.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="MachineLearning.Utilities.ActivationFunction">
+        <TypeIdentifier>
+          <NewMemberFileName>Classes\Utilities.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Delegate Name="MachineLearning.Utilities.ActivationFunctionDelegate">
+        <TypeIdentifier>
+          <NewMemberFileName>Classes\Utilities.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+      <Delegate Name="MachineLearning.Utilities.CrossoverDelegate">
+        <TypeIdentifier>
+          <NewMemberFileName>Classes\Utilities.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+      <Delegate Name="MachineLearning.Utilities.MutationDelegate">
+        <TypeIdentifier>
+          <NewMemberFileName>Classes\Utilities.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>ADAAAAAACBAAACAIAABBAAACBAAAAABBACACBCABAAA=</HashCode>
+      <FileName>Classes\Utilities.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="MachineLearning.INeuralLayer">
+    <Position X="7.5" Y="0.5" Width="5.25" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAIAEAAAAAEAAAAAAgAAAAAAAAAAAAAAACAAAAA=</HashCode>
+      <FileName>Interfaces\INeuralLayer.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="MachineLearning.IPopulation&lt;T&gt;">
+    <Position X="18" Y="3.25" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAACAAgAAAAABAAAACAIACAAAAAAAEAAgAAAE=</HashCode>
+      <FileName>Interfaces\IPopulation.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="MachineLearning.ISpecies">
+    <Position X="7.5" Y="13" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Interfaces\ISpecies.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
