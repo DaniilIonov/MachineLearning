@@ -54,7 +54,9 @@
     <Compile Include="Interfaces\ISpecies.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Misc\MachineLearningDiagram.jpg" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="Misc\MachineLearningDiagram.cd" />
   </ItemGroup>
