@@ -17,15 +17,15 @@
   <Class Name="MachineLearning.FullyConnectedLayer" BaseTypeListCollapsed="true">
     <Position X="7.5" Y="3.5" Width="10.25" />
     <TypeIdentifier>
-      <HashCode>JIAAEAIAEAQAAAEAAAAAAgAAEAAAAAAAAEAAACAAABA=</HashCode>
+      <HashCode>JIAAEAIAEA4AAAEAAAAAAgAEEAAAgAAAAGAAAGAAAJA=</HashCode>
       <FileName>Classes\NeuralLayers.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="MachineLearning.NeuralNetwork">
-    <Position X="7.5" Y="8.25" Width="6.5" />
+    <Position X="7.5" Y="10.25" Width="6.5" />
     <TypeIdentifier>
-      <HashCode>AIAgEAAAAAAAAAAEAAAAAgCAQAABEAAEAgAAQCAAABA=</HashCode>
+      <HashCode>AIAgEAABAAIAAAAEAAAAAhCAQAABGAAEAgAAQGAAEJA=</HashCode>
       <FileName>Classes\NeuralNetwork.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -33,15 +33,15 @@
   <Class Name="MachineLearning.Population&lt;T&gt;" BaseTypeListCollapsed="true">
     <Position X="18" Y="6.75" Width="7.25" />
     <TypeIdentifier>
-      <HashCode>ABEAQAAAACAIgEAEIARGAAACCIAiAAAAggAEQAgAAAU=</HashCode>
+      <HashCode>ABEASAABgCAKgFBEICRGACACGIAiAAAIggIEQAoBABU=</HashCode>
       <FileName>Classes\Population.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="MachineLearning.Species">
-    <Position X="8.25" Y="15" Width="5" />
+    <Position X="8.25" Y="18.75" Width="5" />
     <TypeIdentifier>
-      <HashCode>AAAkAAAAAAAAAAAEEAAAAAAAAAEAAAAAAAAAAAAAABA=</HashCode>
+      <HashCode>AAAkAAAgAAAAAAAEEAAAAAAAAAEAAAAAAAAAAAAAABA=</HashCode>
       <FileName>Classes\Species.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -110,7 +110,7 @@
     </TypeIdentifier>
   </Interface>
   <Interface Name="MachineLearning.ISpecies">
-    <Position X="7.5" Y="13" Width="2.5" />
+    <Position X="7.5" Y="16.75" Width="2.5" />
     <TypeIdentifier>
       <HashCode>AAAgAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Interfaces\ISpecies.cs</FileName>

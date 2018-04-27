@@ -13,7 +13,7 @@ namespace MachineLearning
         double Fitness { get; set; }
 
         /// <summary>
-        /// Represents a sinle-dimensional array/list of <see cref="double"/>'s, containing all weights of <see cref="NeuralNetwork"/> in sequence.
+        /// Represents a sinle-dimensional array/list of <see cref="System.Double"/>'s, containing all weights of <see cref="NeuralNetwork"/> in sequence.
         /// </summary>
         List<double> DNA { get; set; }
     }

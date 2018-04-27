@@ -10,45 +10,134 @@ namespace MachineLearning
     [Serializable]
     public class NeuralNetwork : ICloneable
     {
+        private int[] _layersInfo;
+        private List<FullyConnectedLayer> _layers;
+        private double _totalError;
+        private double _l2RegularizationPenalty;
+        private Queue<double> _errorQueue;
+        private Utilities.ActivationFunction _activationType;
+        private Utilities.ActivationFunctionDelegate _activationFunction;
+        private Utilities.ActivationFunctionDelegate _activationFunctionDerivative;
+
         /// <summary>
         /// Contains information about number of neurons in each layer, starting from input layer, ending with output layer.
         /// </summary>
-        public int[] LayersInfo { get; private set; }
+        public int[] LayersInfo
+        {
+            get
+            {
+                return this._layersInfo;
+            }
+            private set
+            {
+                this._layersInfo = value;
+            }
+        }
 
         /// <summary>
         /// List of <see cref="NeuralLayers"/> (building blocks), contains information about <see cref="NeuralLayers.Weights"/>, <see cref="NeuralLayers.DeltaWeights"/> and <see cref="NeuralLayers.PropagatedError"/>.
         /// </summary>
-        public List<FullyConnectedLayer> Layers { get; private set; }
+        public List<FullyConnectedLayer> Layers
+        {
+            get
+            {
+                return this._layers;
+            }
+            private set
+            {
+                this._layers = value;
+            }
+        }
 
         /// <summary>
         /// Contains most recent value of a cost/error function (sum of squares of the errors) as a <see cref="double"/>.
         /// </summary>
-        public double TotalError { get; private set; }
+        public double TotalError
+        {
+            get
+            {
+                return this._totalError;
+            }
+            private set
+            {
+                this._totalError = value;
+            }
+        }
 
         /// <summary>
         /// Contatins most recent value of a L2 regularization penalty. L2 regularization is sum of squares of all weights.
         /// </summary>
-        public double L2RegularizationPenalty { get; private set; }
+        public double L2RegularizationPenalty
+        {
+            get
+            {
+                return this._l2RegularizationPenalty;
+            }
+            private set
+            {
+                this._l2RegularizationPenalty = value;
+            }
+        }
 
         /// <summary>
         /// Contains last 100 error values. Can be used to determine if error is stabilized.
         /// </summary>
-        public Queue<Double> ErrorQueue { get; private set; }
+        public Queue<double> ErrorQueue
+        {
+            get
+            {
+                return this._errorQueue;
+            }
+            private set
+            {
+                this._errorQueue = value;
+            }
+        }
 
         /// <summary>
         /// Represents the type of activation function.
         /// </summary>
-        public Utilities.ActivationFunction ActivationType { get; set; }
+        public Utilities.ActivationFunction ActivationType
+        {
+            get
+            {
+                return this._activationType;
+            }
+            set
+            {
+                this._activationType = value;
+            }
+        }
 
         /// <summary>
         /// Represents a delegate to hold activation function.
         /// </summary>
-        public Utilities.ActivationFunctionDelegate ActivationFunction { get; private set; }
+        public Utilities.ActivationFunctionDelegate ActivationFunction
+        {
+            get
+            {
+                return this._activationFunction;
+            }
+            private set
+            {
+                this._activationFunction = value;
+            }
+        }
 
         /// <summary>
         /// Represents a delegate to hold activation function derivative.
         /// </summary>
-        public Utilities.ActivationFunctionDelegate ActivationFunctionDerivative { get; private set; }
+        public Utilities.ActivationFunctionDelegate ActivationFunctionDerivative
+        {
+            get
+            {
+                return this._activationFunctionDerivative;
+            }
+            private set
+            {
+                this._activationFunctionDerivative = value;
+            }
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NeuralNetwork"/> with specified number of neurons in each layer.
@@ -57,38 +146,38 @@ namespace MachineLearning
         /// <param name="layersInfo">A list of number of neurons in each layer starting at input layer. Can be entered as an array of <see cref="int"/>'s, or comma-separated <see cref="int"/> values.</param>
         public NeuralNetwork(Utilities.ActivationFunction activationType, params int[] layersInfo)
         {
-            LayersInfo = layersInfo.Clone() as int[];   //Deep copies layersInfo to a local field.
-            Layers = new List<FullyConnectedLayer>();           //Initializes a List of NeuronLayer's.
-            ErrorQueue = new Queue<double>();           //Initializes a Queue for error values.
-            ActivationType = activationType;            //Copies the type of activation function.
+            this.LayersInfo = layersInfo.Clone() as int[];   //Deep copies layersInfo to a local field.
+            this.Layers = new List<FullyConnectedLayer>();           //Initializes a List of NeuronLayer's.
+            this.ErrorQueue = new Queue<double>();           //Initializes a Queue for error values.
+            this.ActivationType = activationType;            //Copies the type of activation function.
 
-            switch (ActivationType)     //Depending on type of activation function, assign correct function call to ActivationFunction and ActivationFunctionDerivative from Funtions class.
+            switch (this.ActivationType)     //Depending on type of activation function, assign correct function call to ActivationFunction and ActivationFunctionDerivative from Funtions class.
             {
                 case Utilities.ActivationFunction.Tanh:
-                    ActivationFunction = Utilities.Tanh;
-                    ActivationFunctionDerivative = Utilities.TanhDerivative;
+                    this.ActivationFunction = Utilities.Tanh;
+                    this.ActivationFunctionDerivative = Utilities.TanhDerivative;
                     break;
                 case Utilities.ActivationFunction.Logistic:
-                    ActivationFunction = Utilities.Logistic;
-                    ActivationFunctionDerivative = Utilities.LogisticDerivative;
+                    this.ActivationFunction = Utilities.Logistic;
+                    this.ActivationFunctionDerivative = Utilities.LogisticDerivative;
                     break;
                 case Utilities.ActivationFunction.ReLU:
-                    ActivationFunction = Utilities.ReLU;
-                    ActivationFunctionDerivative = Utilities.ReLUDerivative;
+                    this.ActivationFunction = Utilities.ReLU;
+                    this.ActivationFunctionDerivative = Utilities.ReLUDerivative;
                     break;
                 case Utilities.ActivationFunction.LeakyReLU:
-                    ActivationFunction = Utilities.LeakyReLU;
-                    ActivationFunctionDerivative = Utilities.LeakyReLUDerivative;
+                    this.ActivationFunction = Utilities.LeakyReLU;
+                    this.ActivationFunctionDerivative = Utilities.LeakyReLUDerivative;
                     break;
                 default:                //Should never be null.
-                    ActivationFunction = null;
-                    ActivationFunctionDerivative = null;
+                    this.ActivationFunction = null;
+                    this.ActivationFunctionDerivative = null;
                     break;
             }
 
-            for (int layerIndex = 0; layerIndex < LayersInfo.Length - 1; layerIndex++)  //For each pair of layer info, create a FullyConnectedLayer with specified number of inputs (without bias), and number of outputs that matches the number of inputs of the next layer.
+            for (int layerIndex = 0; layerIndex < this.LayersInfo.Length - 1; layerIndex++)  //For each pair of layer info, create a FullyConnectedLayer with specified number of inputs (without bias), and number of outputs that matches the number of inputs of the next layer.
             {
-                Layers.Add(new FullyConnectedLayer(ActivationFunction, ActivationFunctionDerivative, LayersInfo[layerIndex], LayersInfo[layerIndex + 1]));  //Adds new instance of FullyConnectedLayer to a local List.
+                this.Layers.Add(new FullyConnectedLayer(this.ActivationFunction, this.ActivationFunctionDerivative, this.LayersInfo[layerIndex], this.LayersInfo[layerIndex + 1]));  //Adds new instance of FullyConnectedLayer to a local List.
             }
         }
 
@@ -99,14 +188,14 @@ namespace MachineLearning
         /// <returns>A single-dimensional array of <see cref="double"/>'s representing a product of weights by inputs matrices.</returns>
         public double[] Guess(double[] Inputs)
         {
-            Layers.First().FeedForward(Inputs); //Manually feeds forward input array 
+            this.Layers.First().FeedForward(Inputs); //Manually feeds forward input array 
 
-            for (int layerIndex = 1; layerIndex < Layers.Count; layerIndex++)   //For each layer starting at second one (because first one is propagated manually):
+            for (int layerIndex = 1; layerIndex < this.Layers.Count; layerIndex++)   //For each layer starting at second one (because first one is propagated manually):
             {
-                Layers[layerIndex].FeedForward(Layers[layerIndex - 1].Outputs);     //The output on previous layer goes to input of current layer.
+                this.Layers[layerIndex].FeedForward(this.Layers[layerIndex - 1].Outputs);     //The output on previous layer goes to input of current layer.
             }
 
-            return Layers.Last().Outputs;   //Returns the output of last layer, representing the output of the NeuralNetwork itself.
+            return this.Layers.Last().Outputs;   //Returns the output of last layer, representing the output of the NeuralNetwork itself.
         }
 
         /// <summary>
@@ -122,44 +211,44 @@ namespace MachineLearning
             double[] guessed = Guess(Inputs).Clone() as double[];   //Makes a deep copy of the output of the Guess function.
 
             double[] Error = new double[CorrectOutputs.Length];     //Creates an empty array of double's with the same size as output neurons.
-            TotalError = 0;                                         //Resets TotalError for current training set.
-            L2RegularizationPenalty = 0;
+            this.TotalError = 0;                                         //Resets TotalError for current training set.
+            this.L2RegularizationPenalty = 0;
 
             for (int errorIndex = 0; errorIndex < Error.Length; errorIndex++)   //For each output neuron:
             {
                 Error[errorIndex] = guessed[errorIndex] - CorrectOutputs[errorIndex];   //Error of each neuron is a difference of guessed output and correct output.
-                TotalError += (Error[errorIndex] * Error[errorIndex]);                  //Total error is ecrementer by the square of each neuron error.
+                this.TotalError += (Error[errorIndex] * Error[errorIndex]);                  //Total error is ecrementer by the square of each neuron error.
             }
 
-            for (int layerIndex = 0; layerIndex < Layers.Count; layerIndex++)   //For each layer:
+            for (int layerIndex = 0; layerIndex < this.Layers.Count; layerIndex++)   //For each layer:
             {
-                for (int outputIndex = 0; outputIndex < Layers[layerIndex].NumberOfOutputs; outputIndex++)  //For each neuron in particular layer:
+                for (int outputIndex = 0; outputIndex < this.Layers[layerIndex].NumberOfOutputs; outputIndex++)  //For each neuron in particular layer:
                 {
-                    for (int inputIndex = 0; inputIndex < Layers[layerIndex].NumberOfInputs - 1; inputIndex++)  //For each connection to input neuron excluding connection to bias:
+                    for (int inputIndex = 0; inputIndex < this.Layers[layerIndex].NumberOfInputs - 1; inputIndex++)  //For each connection to input neuron excluding connection to bias:
                     {
-                        L2RegularizationPenalty += Layers[layerIndex].Weights[outputIndex, inputIndex] * Layers[layerIndex].Weights[outputIndex, inputIndex];    //Increments L2 penalty by square of the each weight.
+                        this.L2RegularizationPenalty += this.Layers[layerIndex].Weights[outputIndex, inputIndex] * this.Layers[layerIndex].Weights[outputIndex, inputIndex];    //Increments L2 penalty by square of the each weight.
                     }
                 }
             }
 
-            Layers.Last().BackPropagation(Error);   //Calls the Backpropagation algorithm for output layer of the Neural Network with calculated errors.
+            this.Layers.Last().BackPropagation(Error);   //Calls the Backpropagation algorithm for output layer of the Neural Network with calculated errors.
 
-            for (int layerIndex = Layers.Count - 2; layerIndex >= 0; layerIndex--)  //For each layer of Neural Network starting at second last layer going to input layer:
+            for (int layerIndex = this.Layers.Count - 2; layerIndex >= 0; layerIndex--)  //For each layer of Neural Network starting at second last layer going to input layer:
             {
-                Layers[layerIndex].BackPropagation(Layers[layerIndex + 1].PropagatedError, Layers[layerIndex + 1].Weights); //Calls Backpropagation algorythm for hidden and/or input neuron, passing PropagatedError and Weights from next outer layer.
+                this.Layers[layerIndex].BackPropagation(this.Layers[layerIndex + 1].PropagatedError, this.Layers[layerIndex + 1].Weights); //Calls Backpropagation algorythm for hidden and/or input neuron, passing PropagatedError and Weights from next outer layer.
             }
 
-            for (int layerIndex = 0; layerIndex < Layers.Count; layerIndex++)   //For each layer in Neural Network:
+            for (int layerIndex = 0; layerIndex < this.Layers.Count; layerIndex++)   //For each layer in Neural Network:
             {
-                Layers[layerIndex].CorrectWeights(LearningRate, regularizationRate);   //Correct Weights based on calculated DeltaWeights from Backpropagation algorythm.
+                this.Layers[layerIndex].CorrectWeights(LearningRate, regularizationRate);   //Correct Weights based on calculated DeltaWeights from Backpropagation algorythm.
             }
 
             //Keeps the size of the Queue to be 100.
-            if (ErrorQueue.Count >= 100)    //If there are more than 100 elements in Queue:
+            if (this.ErrorQueue.Count >= 100)    //If there are more than 100 elements in Queue:
             {
-                ErrorQueue.Dequeue();   //Releases oldest error from Queue.
+                this.ErrorQueue.Dequeue();   //Releases oldest error from Queue.
             }
-            ErrorQueue.Enqueue(TotalError); //Appends new error to the queue.
+            this.ErrorQueue.Enqueue(this.TotalError); //Appends new error to the queue.
 
             return ToTrain();    //Returns a boolean value true if error value is not stable yet; false if error is stabilazed.
         }
@@ -174,13 +263,13 @@ namespace MachineLearning
         /// <returns>A boolean value true if error is not stabilazed, or false if stable.</returns>
         public bool Train(IOList IOSets, int batchSize, double LearningRate, double regularizationRate)
         {
-            TotalError = 0; //Resets TotalError for current training set.
-            L2RegularizationPenalty = 0; //Resets L2 regularization.
+            this.TotalError = 0; //Resets TotalError for current training set.
+            this.L2RegularizationPenalty = 0; //Resets L2 regularization.
 
             //To Safely divide IOSets into smaller batcher, 1st determine how many whole batches can fit is IOSets.
             for (int batchNum = 0; batchNum < IOSets.Count / batchSize; batchNum++) //For whole number of batches in IOSets:
             {
-                double[] wholeBatchError = new double[LayersInfo.Last()];     //Creates an empty array of double's with the same size as number of output neurons.
+                double[] wholeBatchError = new double[this.LayersInfo.Last()];     //Creates an empty array of double's with the same size as number of output neurons.
 
                 for (int batchIndex = 0; batchIndex < batchSize; batchIndex++)  //For number of input-output pairs in batch:
                 {
@@ -195,35 +284,35 @@ namespace MachineLearning
                     for (int errorIndex = 0; errorIndex < wholeBatchError.Length; errorIndex++)   //For each output neuron:
                     {
                         wholeBatchError[errorIndex] += ((guessed[errorIndex] - CorrectOutputs[errorIndex]) / batchSize);   //Error of each neuron is a difference of guessed output and correct output divided by the batchSize to get average.
-                        TotalError += (wholeBatchError[errorIndex] * wholeBatchError[errorIndex] / batchSize);                  //Total error is ecrementer by the square of each neuron error divided by batchSize to get average.
+                        this.TotalError += (wholeBatchError[errorIndex] * wholeBatchError[errorIndex] / batchSize);                  //Total error is ecrementer by the square of each neuron error divided by batchSize to get average.
                     }
 
-                    for (int layerIndex = 0; layerIndex < Layers.Count; layerIndex++)   //For each layer:
+                    for (int layerIndex = 0; layerIndex < this.Layers.Count; layerIndex++)   //For each layer:
                     {
-                        for (int outputIndex = 0; outputIndex < Layers[layerIndex].NumberOfOutputs; outputIndex++)  //For each neuron in particular layer:
+                        for (int outputIndex = 0; outputIndex < this.Layers[layerIndex].NumberOfOutputs; outputIndex++)  //For each neuron in particular layer:
                         {
-                            for (int inputIndex = 0; inputIndex < Layers[layerIndex].NumberOfInputs - 1; inputIndex++)  //For each connection to input neuron excluding connection to bias:
+                            for (int inputIndex = 0; inputIndex < this.Layers[layerIndex].NumberOfInputs - 1; inputIndex++)  //For each connection to input neuron excluding connection to bias:
                             {
-                                L2RegularizationPenalty += (Layers[layerIndex].Weights[outputIndex, inputIndex] * Layers[layerIndex].Weights[outputIndex, inputIndex] / batchSize);    //Increments L2 regularization penalty by square of the each weight divided by batchSize to get average.
+                                this.L2RegularizationPenalty += (this.Layers[layerIndex].Weights[outputIndex, inputIndex] * this.Layers[layerIndex].Weights[outputIndex, inputIndex] / batchSize);    //Increments L2 regularization penalty by square of the each weight divided by batchSize to get average.
                             }
                         }
                     }
                 }
 
-                Layers.Last().BackPropagation(wholeBatchError);   //Calls the Backpropagation algorithm for output layer of the Neural Network with calculated errors.
+                this.Layers.Last().BackPropagation(wholeBatchError);   //Calls the Backpropagation algorithm for output layer of the Neural Network with calculated errors.
 
-                for (int layerIndex = Layers.Count - 2; layerIndex >= 0; layerIndex--)  //For each layer of Neural Network starting at second last layer going to input layer:
+                for (int layerIndex = this.Layers.Count - 2; layerIndex >= 0; layerIndex--)  //For each layer of Neural Network starting at second last layer going to input layer:
                 {
-                    Layers[layerIndex].BackPropagation(Layers[layerIndex + 1].PropagatedError, Layers[layerIndex + 1].Weights); //Calls Backpropagation algorythm for hidden and/or input neuron, passing PropagatedError and Weights from next outer layer.
+                    this.Layers[layerIndex].BackPropagation(this.Layers[layerIndex + 1].PropagatedError, this.Layers[layerIndex + 1].Weights); //Calls Backpropagation algorythm for hidden and/or input neuron, passing PropagatedError and Weights from next outer layer.
                 }
 
-                for (int layerIndex = 0; layerIndex < Layers.Count; layerIndex++)   //For each layer in Neural Network:
+                for (int layerIndex = 0; layerIndex < this.Layers.Count; layerIndex++)   //For each layer in Neural Network:
                 {
-                    Layers[layerIndex].CorrectWeights(LearningRate, regularizationRate);   //Correct Weights based on calculated DeltaWeights from Backpropagation algorythm.
+                    this.Layers[layerIndex].CorrectWeights(LearningRate, regularizationRate);   //Correct Weights based on calculated DeltaWeights from Backpropagation algorythm.
                 }
             }
 
-            double[] remainedBatchError = new double[LayersInfo.Last()];
+            double[] remainedBatchError = new double[this.LayersInfo.Last()];
 
             //The remaining input-output pair that could not fit into whole-sized batches:
             for (int batchIndex = 0; batchIndex < IOSets.Count % batchSize; batchIndex++)   //For each remained element:
@@ -236,44 +325,44 @@ namespace MachineLearning
 
                 double[] guessed = Guess(Inputs).Clone() as double[];   //Makes a deep copy of the output of the Guess function.
 
-                TotalError = 0;                                         //Resets TotalError for current training set.
+                this.TotalError = 0;                                         //Resets TotalError for current training set.
 
                 for (int errorIndex = 0; errorIndex < remainedBatchError.Length; errorIndex++)   //For each output neuron:
                 {
                     remainedBatchError[errorIndex] = (guessed[errorIndex] - CorrectOutputs[errorIndex]) / (IOSets.Count % batchSize);   //Error of each neuron is a difference of guessed output and correct output divided by remained batchSize to get average.
-                    TotalError += (remainedBatchError[errorIndex] * remainedBatchError[errorIndex] / (IOSets.Count % batchSize));                  //Total error is ecrementer by the square of each neuron error divided by remained batchSize to get average.
+                    this.TotalError += (remainedBatchError[errorIndex] * remainedBatchError[errorIndex] / (IOSets.Count % batchSize));                  //Total error is ecrementer by the square of each neuron error divided by remained batchSize to get average.
                 }
 
-                for (int layerIndex = 0; layerIndex < Layers.Count; layerIndex++)   //For each layer:
+                for (int layerIndex = 0; layerIndex < this.Layers.Count; layerIndex++)   //For each layer:
                 {
-                    for (int outputIndex = 0; outputIndex < Layers[layerIndex].NumberOfOutputs; outputIndex++)  //For each neuron in particular layer:
+                    for (int outputIndex = 0; outputIndex < this.Layers[layerIndex].NumberOfOutputs; outputIndex++)  //For each neuron in particular layer:
                     {
-                        for (int inputIndex = 0; inputIndex < Layers[layerIndex].NumberOfInputs - 1; inputIndex++)  //For each connection to input neuron excluding connection to bias:
+                        for (int inputIndex = 0; inputIndex < this.Layers[layerIndex].NumberOfInputs - 1; inputIndex++)  //For each connection to input neuron excluding connection to bias:
                         {
-                            TotalError += (Layers[layerIndex].Weights[outputIndex, inputIndex] * Layers[layerIndex].Weights[outputIndex, inputIndex] / (IOSets.Count % batchSize));    //Increments total error by square of the each weight (L2 regression) divided by remained batchSize to get average.
+                            this.TotalError += (this.Layers[layerIndex].Weights[outputIndex, inputIndex] * this.Layers[layerIndex].Weights[outputIndex, inputIndex] / (IOSets.Count % batchSize));    //Increments total error by square of the each weight (L2 regression) divided by remained batchSize to get average.
                         }
                     }
                 }
             }
 
-            Layers.Last().BackPropagation(remainedBatchError);   //Calls the Backpropagation algorithm for output layer of the Neural Network with calculated errors.
+            this.Layers.Last().BackPropagation(remainedBatchError);   //Calls the Backpropagation algorithm for output layer of the Neural Network with calculated errors.
 
-            for (int layerIndex = Layers.Count - 2; layerIndex >= 0; layerIndex--)  //For each layer of Neural Network starting at second last layer going to input layer:
+            for (int layerIndex = this.Layers.Count - 2; layerIndex >= 0; layerIndex--)  //For each layer of Neural Network starting at second last layer going to input layer:
             {
-                Layers[layerIndex].BackPropagation(Layers[layerIndex + 1].PropagatedError, Layers[layerIndex + 1].Weights); //Calls Backpropagation algorythm for hidden and/or input neuron, passing PropagatedError and Weights from next outer layer.
+                this.Layers[layerIndex].BackPropagation(this.Layers[layerIndex + 1].PropagatedError, this.Layers[layerIndex + 1].Weights); //Calls Backpropagation algorythm for hidden and/or input neuron, passing PropagatedError and Weights from next outer layer.
             }
 
-            for (int layerIndex = 0; layerIndex < Layers.Count; layerIndex++)   //For each layer in Neural Network:
+            for (int layerIndex = 0; layerIndex < this.Layers.Count; layerIndex++)   //For each layer in Neural Network:
             {
-                Layers[layerIndex].CorrectWeights(LearningRate, regularizationRate);   //Correct Weights based on calculated DeltaWeights from Backpropagation algorythm.
+                this.Layers[layerIndex].CorrectWeights(LearningRate, regularizationRate);   //Correct Weights based on calculated DeltaWeights from Backpropagation algorythm.
             }
 
             //Keeps the size of the Queue to be 100.
-            if (ErrorQueue.Count >= 100)    //If there are more than 100 elements in Queue:
+            if (this.ErrorQueue.Count >= 100)    //If there are more than 100 elements in Queue:
             {
-                ErrorQueue.Dequeue();   //Releases oldest error from Queue.
+                this.ErrorQueue.Dequeue();   //Releases oldest error from Queue.
             }
-            ErrorQueue.Enqueue(TotalError); //Appends new error to the queue.
+            this.ErrorQueue.Enqueue(this.TotalError); //Appends new error to the queue.
 
             return ToTrain();    //Returns a boolean value true if error value is not stable yet; false if error is stabilazed.
         }
@@ -284,7 +373,7 @@ namespace MachineLearning
         /// <returns>Returns true if minimum is reached, and false is error is still changing.</returns>
         private bool ToTrain()
         {
-            return ErrorQueue.Average() == ((ErrorQueue.Min() + ErrorQueue.Max()) / 2.0) || true;   //If the average of all error values is equal to average of minimun and maximum error values.
+            return this.ErrorQueue.Average() == ((this.ErrorQueue.Min() + this.ErrorQueue.Max()) / 2.0) || true;   //If the average of all error values is equal to average of minimun and maximum error values.
         }
 
         /// <summary>
@@ -293,7 +382,7 @@ namespace MachineLearning
         /// <returns>An objec containing a deep copy of the original <see cref="NeuralNetwork"/> object.</returns>
         public virtual object Clone()
         {
-            NeuralNetwork copied = new NeuralNetwork(ActivationType, LayersInfo)    //Creates a copy of the original NeuralNetwork with the same fields.
+            NeuralNetwork copied = new NeuralNetwork(this.ActivationType, this.LayersInfo)    //Creates a copy of the original NeuralNetwork with the same fields.
             {
                 ErrorQueue = new Queue<double>(this.ErrorQueue),
 
@@ -314,8 +403,8 @@ namespace MachineLearning
         /// <returns>A <see cref="string"/> representing information about <see cref="NeuralNetwork"/> with format: 'Layers info: {number of inputs}, ... , {number of outputs}.</returns>
         public override string ToString()
         {
-            String str = "Layers info: ";
-            foreach (int layerInfo in LayersInfo)   //layerInfo represents a number of neurons in particular layer.
+            string str = "Layers info: ";
+            foreach (int layerInfo in this.LayersInfo)   //layerInfo represents a number of neurons in particular layer.
             {
                 str += layerInfo + " ";
             }
@@ -335,11 +424,11 @@ namespace MachineLearning
 
             if (labelsOnly)
             {
-                for (int neuronIndex = 0; neuronIndex < LayersInfo[1]; neuronIndex++)   //For each neuron in he first hidden layer:
+                for (int neuronIndex = 0; neuronIndex < this.LayersInfo[1]; neuronIndex++)   //For each neuron in he first hidden layer:
                 {
                     layerEquations.Add("f(");   //Adds the beggining of activation function notation for neuron's formula.
 
-                    for (int inputLayerIndex = 0; inputLayerIndex < LayersInfo[0]; inputLayerIndex++)   //For each connection/weight to input neurons:
+                    for (int inputLayerIndex = 0; inputLayerIndex < this.LayersInfo[0]; inputLayerIndex++)   //For each connection/weight to input neurons:
                     {
                         layerEquations[neuronIndex] += $"W{0}{neuronIndex}{inputLayerIndex}*I{inputLayerIndex} + "; //Appends a labels representing a weight and input with format: W{layer index}{hidden neuron index}{input neuron index}.
                     }
@@ -353,16 +442,16 @@ namespace MachineLearning
             //If the values of the weights are requested:
             else
             {
-                for (int neuronIndex = 0; neuronIndex < LayersInfo[1]; neuronIndex++)   //For each neuron in first hidden layer:
+                for (int neuronIndex = 0; neuronIndex < this.LayersInfo[1]; neuronIndex++)   //For each neuron in first hidden layer:
                 {
                     layerEquations.Add("f(");   //Adds the beggining of activation function notation for neuron's formula.
 
-                    for (int inputLayerIndex = 0; inputLayerIndex < LayersInfo[0]; inputLayerIndex++)   //For each connection/weight to input neurons:
+                    for (int inputLayerIndex = 0; inputLayerIndex < this.LayersInfo[0]; inputLayerIndex++)   //For each connection/weight to input neurons:
                     {
-                        layerEquations[neuronIndex] += $"[{Layers[0].Weights[neuronIndex, inputLayerIndex]}]*I{inputLayerIndex} + ";    //Appends the value of the weight and input label with format: [weight value]*I{index of input neuron}.
+                        layerEquations[neuronIndex] += $"[{this.Layers[0].Weights[neuronIndex, inputLayerIndex]}]*I{inputLayerIndex} + ";    //Appends the value of the weight and input label with format: [weight value]*I{index of input neuron}.
                     }
 
-                    layerEquations[neuronIndex] += $"[{Layers[0].Weights[neuronIndex, LayersInfo[0]]}]";    //Appends a connection/weight value to a bias if form: [weight value].
+                    layerEquations[neuronIndex] += $"[{this.Layers[0].Weights[neuronIndex, this.LayersInfo[0]]}]";    //Appends a connection/weight value to a bias if form: [weight value].
 
                     layerEquations[neuronIndex] += ")"; //Closes the activation function.
                 }
@@ -379,19 +468,19 @@ namespace MachineLearning
         /// <param name="nextLayerIndex"></param>
         /// <param name="labelsOnly">When set to true - returns formula wihout any coefficients, when false - returns formula with values of the weights from <see cref="NeuralLayers.Weights"/>.</param>
         /// <returns>Returns a <see cref="List{T}"/>, where T is <see cref="string"/>, representing a formula for a specified <see cref="NeuralLayers"/>'s index.</returns>
-        private List<String> GetNextLayerFormula(List<String> prevLayerEquations, int nextLayerIndex, bool labelsOnly)
+        private List<string> GetNextLayerFormula(List<string> prevLayerEquations, int nextLayerIndex, bool labelsOnly)
         {
-            if (nextLayerIndex < LayersInfo.Length) //if the requesed layer's formula if not an output layer:
+            if (nextLayerIndex < this.LayersInfo.Length) //if the requesed layer's formula if not an output layer:
             {
                 if (labelsOnly)
                 {
-                    List<String> layerEquations = new List<String>();   //Initializes a list of strings to store formula for each neuron in first layer.
+                    List<string> layerEquations = new List<string>();   //Initializes a list of strings to store formula for each neuron in first layer.
 
-                    for (int neuronIndex = 0; neuronIndex < LayersInfo[nextLayerIndex]; neuronIndex++)   //For each neuron in the specified layer:
+                    for (int neuronIndex = 0; neuronIndex < this.LayersInfo[nextLayerIndex]; neuronIndex++)   //For each neuron in the specified layer:
                     {
                         layerEquations.Add("f(");   //Adds the beggining of activation function notation for neuron's formula.
 
-                        for (int prevLayerIndex = 0; prevLayerIndex < LayersInfo[nextLayerIndex - 1]; prevLayerIndex++)   //For each connection/weight to previous layer's neurons:
+                        for (int prevLayerIndex = 0; prevLayerIndex < this.LayersInfo[nextLayerIndex - 1]; prevLayerIndex++)   //For each connection/weight to previous layer's neurons:
                         {
                             layerEquations[neuronIndex] += $"W{nextLayerIndex - 1}{neuronIndex}{prevLayerIndex}*{prevLayerEquations[prevLayerIndex]} + "; //Appends a labels representing a weight and input with format: W{layer index}{current layer's neuron index}{previous layer's neuron index}.
                         }
@@ -406,18 +495,18 @@ namespace MachineLearning
                 //If the values of the weights are requested:
                 else
                 {
-                    List<String> layerEquations = new List<String>();   //Initializes a list of strings to store formula for each neuron in first layer.
+                    List<string> layerEquations = new List<string>();   //Initializes a list of strings to store formula for each neuron in first layer.
 
-                    for (int neuronIndex = 0; neuronIndex < LayersInfo[nextLayerIndex]; neuronIndex++)   //For each neuron in specified layer:
+                    for (int neuronIndex = 0; neuronIndex < this.LayersInfo[nextLayerIndex]; neuronIndex++)   //For each neuron in specified layer:
                     {
                         layerEquations.Add("f(");   //Adds the beggining of activation function notation for neuron's formula.
 
-                        for (int prevLayerIndex = 0; prevLayerIndex < LayersInfo[nextLayerIndex - 1]; prevLayerIndex++)   //For each connection/weight to the previous layer's neurons:
+                        for (int prevLayerIndex = 0; prevLayerIndex < this.LayersInfo[nextLayerIndex - 1]; prevLayerIndex++)   //For each connection/weight to the previous layer's neurons:
                         {
-                            layerEquations[neuronIndex] += $"[{Layers[nextLayerIndex - 1].Weights[neuronIndex, prevLayerIndex]}]*{prevLayerEquations[prevLayerIndex]} + ";    //Appends the value of the weight and the equation of previous layer's neuron with format: [weight value]*f(equation of previous layer's neuron).
+                            layerEquations[neuronIndex] += $"[{this.Layers[nextLayerIndex - 1].Weights[neuronIndex, prevLayerIndex]}]*{prevLayerEquations[prevLayerIndex]} + ";    //Appends the value of the weight and the equation of previous layer's neuron with format: [weight value]*f(equation of previous layer's neuron).
                         }
 
-                        layerEquations[neuronIndex] += $"[{Layers[nextLayerIndex - 1].Weights[neuronIndex, LayersInfo[nextLayerIndex - 1]]}]";    //Appends a connection/weight value to a bias if form: [weight value].
+                        layerEquations[neuronIndex] += $"[{this.Layers[nextLayerIndex - 1].Weights[neuronIndex, this.LayersInfo[nextLayerIndex - 1]]}]";    //Appends a connection/weight value to a bias if form: [weight value].
 
                         layerEquations[neuronIndex] += ")"; //Closes the activation function.
                     }
@@ -431,10 +520,10 @@ namespace MachineLearning
                 for (int outputIndex = 0; outputIndex < prevLayerEquations.Count; outputIndex++)    //For each equation of the outout neuron:
                 {
                     string header = $"O{outputIndex}("; //Initializes a header for the formula. Forms a function-like notation.
-                    for (int inputIndex = 0; inputIndex < LayersInfo[0]; inputIndex++)  //For each input neuron:
+                    for (int inputIndex = 0; inputIndex < this.LayersInfo[0]; inputIndex++)  //For each input neuron:
                     {
                         header += $"I{inputIndex}"; //Appends a function parameter in form of I{input index}.
-                        if (inputIndex < LayersInfo[0] - 1) //Parameters are separated by comma.
+                        if (inputIndex < this.LayersInfo[0] - 1) //Parameters are separated by comma.
                         {
                             header += ", ";
                         }

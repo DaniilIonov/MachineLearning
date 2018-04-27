@@ -9,10 +9,22 @@ namespace MachineLearning
     [Serializable]
     public class Species : NeuralNetwork, ICloneable, ISpecies
     {
+        private double _fitness;
+
         /// <summary>
         /// Represents overall performance of <see cref="Species"/>. Higher the fitness, higher the chances of this <see cref="Species"/> to breed.
         /// </summary>
-        public double Fitness { get; set; }
+        public double Fitness
+        {
+            get
+            {
+                return this._fitness;
+            }
+            set
+            {
+                this._fitness = value;
+            }
+        }
 
         /// <summary>
         /// Represents a sinle-dimensional array/list of <see cref="double"/>'s, containing all weights of <see cref="NeuralNetwork"/> in sequence.
@@ -30,7 +42,7 @@ namespace MachineLearning
         /// <param name="layersInfo">A list of number of neurons in each layer starting at input layer. Can be entered as an array of <see cref="int"/>'s, or comma-separated <see cref="int"/> values.</param>
         public Species(Utilities.ActivationFunction activationType, params int[] layersInfo) : base(activationType, layersInfo)
         {
-            Fitness = 0.0;  //Resets fitness.
+            this.Fitness = 0.0;  //Resets fitness.
         }
 
         /// <summary>
@@ -41,8 +53,8 @@ namespace MachineLearning
         /// <param name="_DNA">A <see cref="List{T}"/> of Weights, where T is <see cref="double"/>, to populate all <see cref="NeuralLayers.Weights"/>.</param>
         public Species(Utilities.ActivationFunction activationType, int[] layersInfo, List<double> _DNA) : base(activationType, layersInfo)
         {
-            DNA = _DNA; //Populates weights from given list.
-            Fitness = 0.0;  //Resets fitness.
+            this.DNA = _DNA; //Populates weights from given list.
+            this.Fitness = 0.0;  //Resets fitness.
         }
 
         /// <summary>
@@ -53,7 +65,7 @@ namespace MachineLearning
         {
             int index = 0;  //Resets the index that will be used for single-dimensional array.
 
-            foreach (FullyConnectedLayer Layer in Layers)   //For each FullyConnectedLayer in Layers list:
+            foreach (FullyConnectedLayer Layer in this.Layers)   //For each FullyConnectedLayer in Layers list:
             {
                 for (int outputIndex = 0; outputIndex < Layer.NumberOfOutputs; outputIndex++)   //For each output neuron in that Layer:
                 {
@@ -74,7 +86,7 @@ namespace MachineLearning
         {
             List<double> WeightsList = new List<double>();  //Initializes empty list of double's to hold all weight.
 
-            foreach (FullyConnectedLayer Layer in Layers)   //For each FullyConnectedLayer in Layers list:
+            foreach (FullyConnectedLayer Layer in this.Layers)   //For each FullyConnectedLayer in Layers list:
             {
                 for (int outputIndex = 0; outputIndex < Layer.NumberOfOutputs; outputIndex++)   //For each output neuron in that Layer:
                 {
@@ -94,7 +106,7 @@ namespace MachineLearning
         /// <returns>A string containing a formated fitness value.</returns>
         public override string ToString()
         {
-            return String.Format("The Fitness value is {0}", Fitness);
+            return string.Format("The Fitness value is {0}", this.Fitness);
         }
 
         /// <summary>
@@ -103,8 +115,10 @@ namespace MachineLearning
         /// <returns>A copy of original <see cref="Species"/> object, populated with the same data.</returns>
         public override object Clone()
         {
-            Species copied = new Species(this.ActivationType, this.LayersInfo, this.DNA);
-            copied.Fitness = this.Fitness;
+            Species copied = new Species(this.ActivationType, this.LayersInfo, this.DNA)
+            {
+                Fitness = this.Fitness
+            };
 
             return copied;
         }

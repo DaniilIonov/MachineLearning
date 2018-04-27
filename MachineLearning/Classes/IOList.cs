@@ -7,7 +7,7 @@ namespace MachineLearning
     /// Represents a collection of input-output pairs that can be accessed by index.
     /// </summary>
     [Serializable]
-    public class IOList : System.Collections.ObjectModel.Collection<Dictionary<String, List<double>>>
+    public class IOList : System.Collections.ObjectModel.Collection<Dictionary<string, List<double>>>
     {
         /// <summary>
         /// Gets the number of elements actually contained in the <see cref="IOList"/>
@@ -30,7 +30,7 @@ namespace MachineLearning
         /// </summary>
         /// <param name="list">The list that is wrapped by the new collection.</param>
         /// <exception cref="ArgumentNullException">list is null.</exception>
-        public IOList(IList<Dictionary<String, List<double>>> list) : base(list)
+        public IOList(IList<Dictionary<string, List<double>>> list) : base(list)
         {
 
         }
@@ -42,9 +42,11 @@ namespace MachineLearning
         /// <param name="_Outputs">The output set to be added to the end of the <see cref="IOList"/>.</param>
         public void Add(List<double> _Inputs, List<double> _Outputs)
         {
-            Dictionary<String, List<double>> dictionary = new Dictionary<string, List<double>>();
-            dictionary.Add("Inputs", _Inputs);
-            dictionary.Add("Outputs", _Outputs);
+            Dictionary<string, List<double>> dictionary = new Dictionary<string, List<double>>
+            {
+                { "Inputs", _Inputs },
+                { "Outputs", _Outputs }
+            };
             base.Add(dictionary);
         }
 
@@ -54,7 +56,7 @@ namespace MachineLearning
         /// <returns>A string in format "Count = <see cref="IOList.Count"/>.</returns>
         public override string ToString()
         {
-            return String.Format("Count = {0}", Count);
+            return string.Format("Count = {0}", this.Count);
         }
 
         /// <summary>
@@ -62,12 +64,12 @@ namespace MachineLearning
         /// </summary>
         public void Shuffle()
         {
-            var n = base.Count;
+            int n = base.Count;
             while (n > 1)
             {
                 n--;
-                var k = ThreadSafeRandom.Next(n + 1);
-                var value = base[k];
+                int k = ThreadSafeRandom.Next(n + 1);
+                Dictionary<string, List<double>> value = base[k];
                 base[k] = base[n];
                 base[n] = value;
             }

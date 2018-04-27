@@ -11,91 +11,171 @@ namespace MachineLearning
     [Serializable]
     public class Population<T> : IPopulation<T> where T : Species
     {
+        private List<T> _members;
+        private int _size;
+        private int[] _layersInfo;
+        private T _bestMember;
+        private int _currentGeneration;
+        private Utilities.ActivationFunction _activationFunctionType;
+        private Utilities.CrossoverType crossoverType;
+        private Utilities.CrossoverDelegate _crossover;
+        private Utilities.MutationType mutationType;
+        private Utilities.MutationDelegate _mutation;
+        private double _mutationRate;
+        private double _maxMutationMagnitude;
+        private double _percentToKeep;
+        private bool _isSorted;
+        private bool _isNormalized;
+        private bool _isFiltered;
+
         /// <summary>
         /// Represents a list of all <see cref="Species"/> objects, contained in <see cref="Population{T}"/> class, where T is derived from <see cref="Species"/>.
         /// </summary>
-        public List<T> Members { get; private set; }
+        public List<T> Members
+        {
+            get
+            {
+                return this._members;
+            }
+            private set
+            {
+                this._members = value;
+            }
+        }
 
         /// <summary>
         /// Represents the number of <see cref="Species"/> in <see cref="Population{T}"/>.
         /// </summary>
-        public int Size { get; private set; }
+        public int Size
+        {
+            get
+            {
+                return this._size;
+            }
+            private set
+            {
+                this._size = value;
+            }
+        }
 
         /// <summary>
         /// Contains information about number of neurons in each layer, starting from input layer, ending with output layer.
         /// </summary>
-        public int[] LayersInfo { get; private set; }
+        public int[] LayersInfo
+        {
+            get
+            {
+                return this._layersInfo;
+            }
+            private set
+            {
+                this._layersInfo = value;
+            }
+        }
 
         /// <summary>
         /// Represents a deep copy of the <see cref="Species"/> with the highest numberic value of <see cref="Species.Fitness"/> before each breeding cycle.
         /// </summary>
-        public T BestMember { get; private set; }
+        public T BestMember
+        {
+            get
+            {
+                return this._bestMember;
+            }
+            private set
+            {
+                this._bestMember = value;
+            }
+        }
 
         /// <summary>
         /// Represents a current total number of full breeding cycles past from the creation of <see cref="Population{T}"/>.
         /// </summary>
-        public int CurrentGeneration { get; private set; }
+        public int CurrentGeneration
+        {
+            get
+            {
+                return this._currentGeneration;
+            }
+            private set
+            {
+                this._currentGeneration = value;
+            }
+        }
 
         /// <summary>
         /// Represents the type of activation function for <see cref="NeuralNetwork"/>.
         /// </summary>
-        public Utilities.ActivationFunction ActivationFunctionType { get; private set; }
-
-        private Utilities.CrossoverType crossoverType;
+        public Utilities.ActivationFunction ActivationFunctionType
+        {
+            get
+            {
+                return this._activationFunctionType;
+            }
+            private set
+            {
+                this._activationFunctionType = value;
+            }
+        }
 
         /// <summary>
         /// Represents the type of crossover to be used. One of <see cref="Utilities.CrossoverType"/>
         /// </summary>
         public Utilities.CrossoverType CrossoverType
         {
-            get { return crossoverType; }
+            get { return this.crossoverType; }
             set
             {
                 switch (value)
                 {
                     case Utilities.CrossoverType.SinglePoint:
-                        Crossover = Utilities.SinglePointCrossover;
+                        this.Crossover = Utilities.SinglePointCrossover;
                         break;
                     case Utilities.CrossoverType.Uniform:
-                        Crossover = Utilities.UniformCrossover;
+                        this.Crossover = Utilities.UniformCrossover;
                         break;
                     default:
                         break;
                 }
-                crossoverType = value;
+                this.crossoverType = value;
             }
         }
 
         /// <summary>
         /// A crossover function to be used to create children genotypes.
         /// </summary>
-        public Utilities.CrossoverDelegate Crossover { get; set; }
-
-        /// <summary>
-        /// Represents a local private variable to store <see cref="Utilities.MutationType"/>
-        /// </summary>
-        private Utilities.MutationType mutationType;
+        public Utilities.CrossoverDelegate Crossover
+        {
+            get
+            {
+                return this._crossover;
+            }
+            private set
+            {
+                this._crossover = value;
+            }
+        }
 
         /// <summary>
         /// Represents a mutation type. One of <see cref="Utilities.MutationType"/>.
         /// </summary>
         public Utilities.MutationType MutationType
         {
-            get { return mutationType; }
+            get { return this.mutationType; }
             set
             {
                 switch (value)
                 {
                     case Utilities.MutationType.Uniform:
-                        Mutation = Utilities.UniformMutation;
+                        this.Mutation = Utilities.UniformMutation;
                         break;
                     case Utilities.MutationType.Gaussian:
-                        Mutation = Utilities.GaussianMutation;
+                        this.Mutation = Utilities.GaussianMutation;
                         break;
                     default:
                         break;
                 }
-                mutationType = value;
+                this.mutationType = value;
             }
         }
 
@@ -103,37 +183,107 @@ namespace MachineLearning
         /// <summary>
         /// A mutation function to alter child genome.
         /// </summary>
-        public Utilities.MutationDelegate Mutation { get; set; }
+        public Utilities.MutationDelegate Mutation
+        {
+            get
+            {
+                return this._mutation;
+            }
+            private set
+            {
+                this._mutation = value;
+            }
+        }
 
         /// <summary>
         /// The double-precision floaing-poing number represening a percent chance of each Weight to mutate and get a random value. Default value is 0.1.
         /// </summary>
-        public double MutationRate { get; set; }
+        public double MutationRate
+        {
+            get
+            {
+                return this._mutationRate;
+            }
+            set
+            {
+                this._mutationRate = value;
+            }
+        }
 
         /// <summary>
         /// The double-precision floaing-poing number represening the magnitude of change in the Wieght in percentage of Weight value itself. Default value is 0.5.
         /// </summary>
-        public double MaxMutationMagnitude { get; set; }
+        public double MaxMutationMagnitude
+        {
+            get
+            {
+                return this._maxMutationMagnitude;
+            }
+            set
+            {
+                this._maxMutationMagnitude = value;
+            }
+        }
 
         /// <summary>
         /// The double-precision floaing-poing number represening the percentage of <see cref="Population{T}.Members"/> to keep for breeding. Default value is 0.5.
         /// </summary>
-        public double PercentToKeep { get; set; }
+        public double PercentToKeep
+        {
+            get
+            {
+                return this._percentToKeep;
+            }
+            set
+            {
+                this._percentToKeep = value;
+            }
+        }
 
         /// <summary>
         /// A boolean read-only property that indicates if current population is sorted by fitness. Set to false after breeding.
         /// </summary>
-        public bool IsSorted { get; private set; }
+        public bool IsSorted
+        {
+            get
+            {
+                return this._isSorted;
+            }
+            private set
+            {
+                this._isSorted = value;
+            }
+        }
 
         /// <summary>
         /// A boolean read-only property that indicates if all fitness values of the current population are normilzed relative to each other. Set to false after breeding.
         /// </summary>
-        public bool IsNormalized { get; private set; }
+        public bool IsNormalized
+        {
+            get
+            {
+                return this._isNormalized;
+            }
+            private set
+            {
+                this._isNormalized = value;
+            }
+        }
 
         /// <summary>
         /// A boolean read-only property that indicates if worst performing species are filtered out from the current population. Set to false after breeding.
         /// </summary>
-        public bool IsFiltered { get; private set; }
+        public bool IsFiltered
+        {
+            get
+            {
+                return this._isFiltered;
+            }
+            private set
+            {
+                this._isFiltered = value;
+            }
+        }
 
         /// <summary>
         /// Initializes a new instance of <see cref="Population{T}"/>, where T is derived from <see cref="Species"/>, with indicated <see cref="Population{T}.Size"/> and structure of <see cref="NeuralNetwork"/>.
@@ -145,21 +295,21 @@ namespace MachineLearning
         {
             this.Size = Size;
             this.LayersInfo = LayersInfo;
-            ActivationFunctionType = activationType;
-            CurrentGeneration = 1; //Resets the number of generations.
-            MutationRate = 0.1; //Default value is 0.1.
-            MaxMutationMagnitude = 0.5; //Defauld magnitude of mutation is +-50%.
-            PercentToKeep = 0.5; //By default, only best performing half of population is breeding.
+            this.ActivationFunctionType = activationType;
+            this.CurrentGeneration = 1; //Resets the number of generations.
+            this.MutationRate = 0.1; //Default value is 0.1.
+            this.MaxMutationMagnitude = 0.5; //Defauld magnitude of mutation is +-50%.
+            this.PercentToKeep = 0.5; //By default, only best performing half of population is breeding.
 
-            Members = new List<T>();    //Initializes an emty list of Species.
-            BestMember = Activator.CreateInstance(typeof(T), new object[] { ActivationFunctionType, this.LayersInfo }) as T;    //Initializes an instance of <T> with the same parameters as Species constructor.
+            this.Members = new List<T>();    //Initializes an emty list of Species.
+            this.BestMember = Activator.CreateInstance(typeof(T), new object[] { this.ActivationFunctionType, this.LayersInfo }) as T;    //Initializes an instance of <T> with the same parameters as Species constructor.
 
-            CrossoverType = Utilities.CrossoverType.SinglePoint; //Initializes default crossover type.
-            MutationType = Utilities.MutationType.Gaussian;
+            this.CrossoverType = Utilities.CrossoverType.SinglePoint; //Initializes default crossover type.
+            this.MutationType = Utilities.MutationType.Gaussian;
 
             for (int speciesIndex = 0; speciesIndex < this.Size; speciesIndex++)    //Initializes the number of T Species specified in Size parameter.
             {
-                Members.Add(Activator.CreateInstance(typeof(T), new object[] { ActivationFunctionType, this.LayersInfo }) as T);    //Initializes an instance of <T> with the same parameters as Species constructor.
+                this.Members.Add(Activator.CreateInstance(typeof(T), new object[] { this.ActivationFunctionType, this.LayersInfo }) as T);    //Initializes an instance of <T> with the same parameters as Species constructor.
             }
         }
 
@@ -170,22 +320,22 @@ namespace MachineLearning
         {
             T temp; //Creates a blank Species reference.
 
-            for (int i = 0; i < Members.Count; i++) //For all Species:
+            for (int i = 0; i < this.Members.Count; i++) //For all Species:
             {
-                for (int j = 0; j < Members.Count - 1; j++) //Check for all remaining Species:
+                for (int j = 0; j < this.Members.Count - 1; j++) //Check for all remaining Species:
                 {
-                    if (Members[j].Fitness > Members[j + 1].Fitness)    //If current Fitness is greater that Fitness of the next Species - swap their positions, so that Species with the highest Fitness end up at the end of List.
+                    if (this.Members[j].Fitness > this.Members[j + 1].Fitness)    //If current Fitness is greater that Fitness of the next Species - swap their positions, so that Species with the highest Fitness end up at the end of List.
                     {
-                        temp = Members[j];
-                        Members[j] = Members[j + 1];
-                        Members[j + 1] = temp;
+                        temp = this.Members[j];
+                        this.Members[j] = this.Members[j + 1];
+                        this.Members[j + 1] = temp;
                     }
                 }
             }
 
-            BestMember = Members.Last().Clone() as T;   //Creates a deep copy of best performing Species to a local field.
+            this.BestMember = this.Members.Last().Clone() as T;   //Creates a deep copy of best performing Species to a local field.
 
-            IsSorted = true;
+            this.IsSorted = true;
         }
 
         /// <summary>
@@ -193,8 +343,8 @@ namespace MachineLearning
         /// </summary>
         public void NormalizeFitness()
         {
-            double minFitness = Members.First().Fitness;    //Saves the minimum fitness of whole population.
-            double maxFitness = Members.Last().Fitness; //Saves the maximum fitness of whole population.
+            double minFitness = this.Members.First().Fitness;    //Saves the minimum fitness of whole population.
+            double maxFitness = this.Members.Last().Fitness; //Saves the maximum fitness of whole population.
 
             if (minFitness == maxFitness)
             {
@@ -202,18 +352,18 @@ namespace MachineLearning
             }
 
             double sum = 0;
-            foreach (T Member in Members)
+            foreach (T Member in this.Members)
             {
                 Member.Fitness = Utilities.Map(Member.Fitness, minFitness, maxFitness, 0, 1);
                 sum += Member.Fitness;
             }
 
-            foreach (T Member in Members)
+            foreach (T Member in this.Members)
             {
                 Member.Fitness *= (100.0 / sum);
             }
 
-            IsNormalized = true;
+            this.IsNormalized = true;
         }
 
         /// <summary>
@@ -226,11 +376,11 @@ namespace MachineLearning
             //If descending is specified, then Species list is reversed, for Fitness values to be inverted later on.
             if (!ascending)
             {
-                Members.Reverse();
+                this.Members.Reverse();
             }
 
             double cumSum = 0.0;    //Resets the total sum of all Fitness values.
-            foreach (Species Member in Members) //For each Species in Population:
+            foreach (Species Member in this.Members) //For each Species in Population:
             {
                 double fitnessToAdd = ascending ? Member.Fitness : Utilities.Map(Member.Fitness, 0.0, 100.0, 100.0, 0.0);   //If Ascending is specified, then the Fitness remains unchanged. However, when descending is specified, the Fitness value is inverted from 0.0 -> 100.0 and from 100.0 -> 0.0;
                 cumSum += fitnessToAdd;   //Increment total sum by the value of the Species fitness.
@@ -240,7 +390,7 @@ namespace MachineLearning
             double targetSum = 0;   //Resets the target fitness sum.
 
             T chosenSpecies = null; //Creates a placeholder for return value.
-            foreach (Species Member in Members) //For each Species in Population:
+            foreach (Species Member in this.Members) //For each Species in Population:
             {
                 double fitnessToCheck = ascending ? Member.Fitness : Utilities.Map(Member.Fitness, 0.0, 100.0, 100.0, 0.0);   //If Ascending is specified, then the Fitness remains unchanged. However, when descending is specified, the Fitness value is inverted from 0.0 -> 100.0 and from 100.0 -> 0.0;
                 if (randomProb <= (targetSum += fitnessToCheck))    //First increments target sum by Fitness value, then compares new target sum to random cumulative fitness.
@@ -253,7 +403,7 @@ namespace MachineLearning
             //If descending is specified, then Species list is reversed, for Fitness values to be inverted later on.
             if (!ascending)
             {
-                Members.Reverse();
+                this.Members.Reverse();
             }
 
             return chosenSpecies;   //Returns whatever Species has been chosen.
@@ -264,9 +414,9 @@ namespace MachineLearning
         /// </summary>
         public void MutateSpecies()
         {
-            foreach (Species Member in Members) //For each Species in Population:
+            foreach (Species Member in this.Members) //For each Species in Population:
             {
-                Member.DNA = Mutation(this as IPopulation<ISpecies>, Member.DNA); //Changes the Weight of the Species by calling the MutateBrain method, that returns modified Weights list.
+                Member.DNA = this.Mutation(this as IPopulation<ISpecies>, Member.DNA); //Changes the Weight of the Species by calling the MutateBrain method, that returns modified Weights list.
             }
         }
 
@@ -276,25 +426,25 @@ namespace MachineLearning
         /// <returns>A number representing highest <see cref="Species.Fitness"/> value among all <see cref="Population{T}.Members"/>.</returns>
         public double ToBreed()
         {
-            if (!IsSorted)
+            if (!this.IsSorted)
             {
                 SortSpeciesByFitness(); //Sorts Species in ascending order.
             }
-            double bestFitness = BestMember.Fitness;    //Saves the fitnes of Best Species to be return from function.
-            if (!IsNormalized)
+            double bestFitness = this.BestMember.Fitness;    //Saves the fitnes of Best Species to be return from function.
+            if (!this.IsNormalized)
             {
                 NormalizeFitness(); //Mormalizes all Species Fitness values relative to minimum and maximum Fitness among Population.
             }
 
-            if (!IsFiltered)
+            if (!this.IsFiltered)
             {
                 FilterByPerformance();
             }
 
             List<T> newPopulation = new List<T>();  //Initializes an empty List for population of new Speceies.
-            newPopulation.AddRange(Members);
+            newPopulation.AddRange(this.Members);
 
-            while (newPopulation.Count < Size)  //Keeps going untill newPopulation has reached the target Population Size.
+            while (newPopulation.Count < this.Size)  //Keeps going untill newPopulation has reached the target Population Size.
             {
                 //Gets a ramdom Species with probability proportional to its Fitness.
                 Species parentA = GetRandomSpecies();
@@ -305,32 +455,32 @@ namespace MachineLearning
                 List<double> parentB_DNA = parentB.DNA;
 
                 //Calls CreateChildren function to get new children from parents genome.
-                List<double>[] children = Crossover(parentA_DNA, parentB_DNA);
+                List<double>[] children = this.Crossover(parentA_DNA, parentB_DNA);
                 //Saves new child genome in local variable.
                 List<double> child1_DNA = children[0];
                 List<double> child2_DNA = children[1];
 
                 //Mutates Weights of new children/Species with specified mutationRate chance.
-                child1_DNA = Mutation(this as IPopulation<ISpecies>, child1_DNA);
-                child2_DNA = Mutation(this as IPopulation<ISpecies>, child2_DNA);
+                child1_DNA = this.Mutation(this as IPopulation<ISpecies>, child1_DNA);
+                child2_DNA = this.Mutation(this as IPopulation<ISpecies>, child2_DNA);
 
                 //Appends new instances of Species based on DNA of newly creaded children/Species to the newPopulation.
-                newPopulation.Add(Activator.CreateInstance(typeof(T), new object[] { ActivationFunctionType, LayersInfo, child1_DNA }) as T);
-                newPopulation.Add(Activator.CreateInstance(typeof(T), new object[] { ActivationFunctionType, LayersInfo, child2_DNA }) as T);
+                newPopulation.Add(Activator.CreateInstance(typeof(T), new object[] { this.ActivationFunctionType, this.LayersInfo, child1_DNA }) as T);
+                newPopulation.Add(Activator.CreateInstance(typeof(T), new object[] { this.ActivationFunctionType, this.LayersInfo, child2_DNA }) as T);
             }
 
-            newPopulation = newPopulation.GetRange(0, Size);    //Constraints the size of newPopulatio to be exactly the targer Population Size.
+            newPopulation = newPopulation.GetRange(0, this.Size);    //Constraints the size of newPopulatio to be exactly the targer Population Size.
 
-            Members.Clear();
-            Members.InsertRange(0, newPopulation);
+            this.Members.Clear();
+            this.Members.InsertRange(0, newPopulation);
             ResetFitness();
             //Members = newPopulation;    //Replaces old Members with new ones.
 
-            CurrentGeneration++;   //Increments number of generations by 1.
+            this.CurrentGeneration++;   //Increments number of generations by 1.
 
-            IsSorted = false;
-            IsNormalized = false;
-            IsFiltered = false;
+            this.IsSorted = false;
+            this.IsNormalized = false;
+            this.IsFiltered = false;
 
             return bestFitness; //Returns best fitness from before breeding cycle.
         }
@@ -340,13 +490,13 @@ namespace MachineLearning
         /// </summary>
         public void FilterByPerformance()
         {
-            while (Members.Count > (Size * PercentToKeep) && Members.Count > 2)    //Kills worst performing half of population based on their Fitness.
+            while (this.Members.Count > (this.Size * this.PercentToKeep) && this.Members.Count > 2)    //Kills worst performing half of population based on their Fitness.
             {
                 //Members.Remove(GetRandomSpecies(false));    //Removes probabily based chosen Species from List of Members.
-                Members.Remove(Members.First());    //Removes probabily based chosen Species from List of Members.
+                this.Members.Remove(this.Members.First());    //Removes probabily based chosen Species from List of Members.
             }
 
-            IsFiltered = true;
+            this.IsFiltered = true;
         }
 
         /// <summary>
@@ -354,7 +504,7 @@ namespace MachineLearning
         /// </summary>
         public void ResetFitness()
         {
-            foreach (T Member in Members)
+            foreach (T Member in this.Members)
             {
                 Member.Fitness = 0;
             }
@@ -369,7 +519,7 @@ namespace MachineLearning
         /// <param name="regulregularizationRate">The rate by wight L2 regularization occures. L2 regularization minimizes weights, so that all of them are close to 0.0.</param>
         public void TrainSpecies(double[] Inputs, double[] CorrectOutputs, double LearningRate, double regulregularizationRate)
         {
-            foreach (Species Member in Members) //For each Species in Population:
+            foreach (Species Member in this.Members) //For each Species in Population:
             {
                 Member.Train(Inputs, CorrectOutputs, LearningRate, regulregularizationRate);    //Calls the Train() method of NeuralNetwork.
             }
@@ -384,7 +534,7 @@ namespace MachineLearning
         /// <param name="regulregularizationRate">The rate by wight L2 regularization occures. L2 regularization minimizes weights, so that all of them are close to 0.0.</param>
         public void TrainSpecies(IOList IOSets, int batchSize, double LearningRate, double regulregularizationRate)
         {
-            foreach (Species Member in Members)
+            foreach (Species Member in this.Members)
             {
                 Member.Train(IOSets, batchSize, LearningRate, regulregularizationRate);    //Calls the Train() method of NeuralNetwork.
             }
@@ -396,7 +546,7 @@ namespace MachineLearning
         /// <returns>A string contining the <see cref="Population{T}.Size"/>.</returns>
         public override string ToString()
         {
-            return $"The population size is {Size}";
+            return $"The population size is {this.Size}";
         }
     }
 }
