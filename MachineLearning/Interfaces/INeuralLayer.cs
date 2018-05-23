@@ -1,22 +1,42 @@
-﻿namespace MachineLearning
+﻿using System;
+using System.Collections.Generic;
+
+namespace MachineLearning
 {
     /// <summary>
-    /// Defines a Neural Layer Interface to be used in <see cref="NeuralNetwork"/> class.
+    /// Defines a Neural Layer Interface to be used in <see cref="NeuralNetworkOld"/> class.
     /// </summary>
-    public interface INeuralLayer
+    public interface INeuralLayer : ICloneable
     {
-        int NumberOfInputs { get; }
+        IRegularization Regularization
+        {
+            get; set;
+        }
 
-        int NumberOfOutputs { get; }
+        IActivation Activation
+        {
+            get; set;
+        }
 
-        double[] FeedForward(double[] _Inputs);
+        IList<double> FlatData
+        {
+            get; set;
+        }
 
-        void BackPropagation(double[] Error);
+        int[] InputDimensions
+        {
+            get;
+        }
 
-        void BackPropagation(double[] PropagatedErrorOuter, double[,] WeightsOuter);
+        int[] OutputDimensions
+        {
+            get;
+        }
 
-        void RandomizeWeights();
+        Matrix FeedForward(Matrix inputs);
 
-        void CorrectWeights(double LearningRate, double regularizationRate);
+        Matrix BackPropagation(Matrix error);
+
+        void CorrectWeights(double learningRate, double regularizationRate);
     }
 }

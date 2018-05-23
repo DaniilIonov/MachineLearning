@@ -10,56 +10,89 @@ namespace MachineLearning
         /// <summary>
         /// Represents a list of all species in current population.
         /// </summary>
-        List<T> Members { get; }
+        List<T> Members
+        {
+            get;
+        }
 
         /// <summary>
         /// Representds the total number of species in current population.
         /// </summary>
-        int Size { get; }
+        int Size
+        {
+            get;
+        }
 
         /// <summary>
         /// Represents the best performing species from previous generation.
         /// </summary>
-        T BestMember { get; }
+        T BestMember
+        {
+            get;
+        }
 
         /// <summary>
         /// Represents current generation.
         /// </summary>
-        int CurrentGeneration { get; }
+        int CurrentGeneration
+        {
+            get;
+        }
 
         /// <summary>
         /// The double-precision floaing-poing number represening a percent chance of each Weight to mutate and get a random value. Default value is 0.1.
         /// </summary>
-        double MutationRate { get; set; }
+        double MutationRate
+        {
+            get; set;
+        }
 
         /// <summary>
         /// The double-precision floaing-poing number represening the magnitude of change in the Wieght in percentage of Weight value itself. Default value is 0.5.
         /// </summary>
-        double MaxMutationMagnitude { get; set; }
+        double MaxMutationMagnitude
+        {
+            get; set;
+        }
 
         /// <summary>
         /// The double-precision floaing-poing number represening the percentage of <see cref="Population{T}.Members"/> to keep for breeding. Default value is 0.5.
         /// </summary>
-        double PercentToKeep { get; set; }
+        double PercentToKeep
+        {
+            get; set;
+        }
 
         /// <summary>
         /// Represents a mutation type. One of <see cref="Utilities.MutationType"/>.
         /// </summary>
-        Utilities.MutationType MutationType { get; set; }
+        Utilities.MutationType MutationType
+        {
+            get; set;
+        }
 
         /// <summary>
         /// Represents the type of crossover to be used. One of <see cref="Utilities.CrossoverType"/>
         /// </summary>
-        Utilities.CrossoverType CrossoverType { get; set; }
+        Utilities.CrossoverType CrossoverType
+        {
+            get; set;
+        }
 
         /// <summary>
         /// A crossover function to be used to create children genotypes.
         /// </summary>
-        Utilities.CrossoverDelegate Crossover { get; }
+        Utilities.CrossoverDelegate Crossover
+        {
+            get;
+        }
 
         /// <summary>
         /// A mutation method to alter child genome.
         /// </summary>
-        Utilities.MutationDelegate Mutation { get; }
+        Utilities.MutationDelegate Mutation
+        {
+            get;
+        }
     }
 }

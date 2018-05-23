@@ -11,8 +11,23 @@ namespace MachineLearning
     [Serializable]
     public static class Utilities
     {
+        public delegate double CostFunctionDelegate(double predicted, double correct);
+
+        public enum RegularizationType
+        {
+            L1,
+            L2,
+            None
+        }
+
+        public enum CostType
+        {
+            Quadratic,
+            CrossEntropy
+        }
+
         /// <summary>
-        /// Mutation alters one or more gene values in a <see cref="ISpecies.DNA"/> from its initial state.
+        /// Mutation alters one or more gene values in a <see cref="ISpecies.GetDNA()"/> from its initial state.
         /// </summary>
         public enum MutationType
         {
@@ -50,7 +65,7 @@ namespace MachineLearning
             /// <summary>
             /// Suppresses value to fit within -1.0 to 1.0 range.
             /// </summary>
-            Tanh,
+            TanH,
 
             /// <summary>
             /// Suppressed value to fit within 0.0 to 1.0 range.
@@ -65,7 +80,9 @@ namespace MachineLearning
             /// <summary>
             /// LeakyReLU activation function returns input if greater that 0.0, and 0.01 portion of input otherwise.
             /// </summary>
-            LeakyReLU
+            LeakyReLU,
+
+            Identity
         }
 
         /// <summary>
@@ -406,6 +423,66 @@ namespace MachineLearning
             }
 
             return destImage;
+        }
+
+        public static int[][] GetPermutatedIndeces(params int[] dimensions)
+        {
+            int[][] axes = new int[dimensions.Length][];
+            int totalPermutations = 1;
+            for (int dimensionIndex = 0; dimensionIndex < dimensions.Length; dimensionIndex++)
+            {
+                totalPermutations *= dimensions[dimensionIndex];
+                axes[dimensionIndex] = new int[dimensions[dimensionIndex]];
+                for (int unit = 0; unit < dimensions[dimensionIndex]; unit++)
+                {
+                    axes[dimensionIndex][unit] = unit;
+                }
+            }
+            int[][] permutations = new int[totalPermutations][];
+
+            IEnumerable<IEnumerable<int>> permutationHelperFunction(IEnumerable<IEnumerable<int>> xss)
+            {
+                if (!xss.Any())
+                {
+                    return new[] { Enumerable.Empty<int>() };
+                }
+                else
+                {
+                    IEnumerable<IEnumerable<int>> query =
+                        from x in xss.First()
+                        from y in permutationHelperFunction(xss.Skip(1))
+                        select new[] { x }.Concat(y);
+                    return query;
+                }
+            }
+
+            IEnumerable<int>[] enumPermutations = permutationHelperFunction(axes).ToArray();
+
+            for (int permutationIndex = 0; permutationIndex < totalPermutations; permutationIndex++)
+            {
+                permutations[permutationIndex] = enumPermutations[permutationIndex].ToArray();
+            }
+
+            return permutations;
+        }
+
+        public static IList<T> TrimEndingElement<T>(IList<T> array, T element) where T : IEquatable<T>
+        {
+            T[] newArray = array.ToArray();
+
+            for (int dimensionIndex = newArray.Length - 1; dimensionIndex >= 2; dimensionIndex--)
+            {
+                if (newArray[dimensionIndex].Equals(element))
+                {
+                    newArray = newArray.Take(newArray.Length - 1).ToArray();
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            return newArray;
         }
     }
 }

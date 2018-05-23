@@ -7,14 +7,17 @@ namespace MachineLearning
     /// Represents a collection of input-output pairs that can be accessed by index.
     /// </summary>
     [Serializable]
-    public class IOList : System.Collections.ObjectModel.Collection<Dictionary<string, List<double>>>
+    public class IOList : System.Collections.ObjectModel.Collection<Dictionary<string, Matrix>>
     {
         /// <summary>
-        /// Gets the number of elements actually contained in the <see cref="IOList"/>
+        /// Gets the number of elements actually contained in the <see cref="IOList"/>.
         /// </summary>
         public new int Count
         {
-            get { return base.Count; }
+            get
+            {
+                return base.Count;
+            }
         }
 
         /// <summary>
@@ -30,7 +33,7 @@ namespace MachineLearning
         /// </summary>
         /// <param name="list">The list that is wrapped by the new collection.</param>
         /// <exception cref="ArgumentNullException">list is null.</exception>
-        public IOList(IList<Dictionary<string, List<double>>> list) : base(list)
+        public IOList(IList<Dictionary<string, Matrix>> list) : base(list)
         {
 
         }
@@ -38,14 +41,14 @@ namespace MachineLearning
         /// <summary>
         /// Adds an input-output pair to the end of the <see cref="IOList"/>.
         /// </summary>
-        /// <param name="_Inputs">The input set to be added to the end of the <see cref="IOList"/>.</param>
-        /// <param name="_Outputs">The output set to be added to the end of the <see cref="IOList"/>.</param>
-        public void Add(List<double> _Inputs, List<double> _Outputs)
+        /// <param name="inputs">The input set to be added to the end of the <see cref="IOList"/>.</param>
+        /// <param name="outputs">The output set to be added to the end of the <see cref="IOList"/>.</param>
+        public void Add(Matrix inputs, Matrix outputs)
         {
-            Dictionary<string, List<double>> dictionary = new Dictionary<string, List<double>>
+            Dictionary<string, Matrix> dictionary = new Dictionary<string, Matrix>
             {
-                { "Inputs", _Inputs },
-                { "Outputs", _Outputs }
+                { "Inputs", inputs },
+                { "Outputs", outputs }
             };
             base.Add(dictionary);
         }
@@ -60,18 +63,18 @@ namespace MachineLearning
         }
 
         /// <summary>
-        /// Shuffles the <see cref="IOList"/>
+        /// Shuffles the <see cref="IOList"/>.
         /// </summary>
         public void Shuffle()
         {
-            int n = base.Count;
+            int n = this.Count;
             while (n > 1)
             {
                 n--;
                 int k = ThreadSafeRandom.Next(n + 1);
-                Dictionary<string, List<double>> value = base[k];
-                base[k] = base[n];
-                base[n] = value;
+                Dictionary<string, Matrix> value = this[k];
+                this[k] = this[n];
+                this[n] = value;
             }
         }
     }

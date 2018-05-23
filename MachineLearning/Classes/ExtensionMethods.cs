@@ -2,9 +2,8 @@
 
 namespace MachineLearning
 {
-
     /// <summary>
-    /// This class is used to add Map and Absolute methods to any double objects.
+    /// This class is used to augment existing classes.
     /// </summary>
     public static class ExtensionMethods
     {

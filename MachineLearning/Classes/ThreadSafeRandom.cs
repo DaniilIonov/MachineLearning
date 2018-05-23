@@ -60,6 +60,17 @@ namespace MachineLearning
             return _local.NextDouble();
         }
 
+        public static double Gaussian(double mean = 0.0, double stddev = 1.0)
+        {
+            // The method requires sampling from a uniform random of (0,1]
+            // but Random.NextDouble() returns a sample of [0,1).
+            double x1 = 1 - NextDouble();
+            double x2 = 1 - NextDouble();
+
+            double y1 = Math.Sqrt(-2.0 * Math.Log(x1)) * Math.Cos(2.0 * Math.PI * x2);
+            return y1 * stddev + mean;
+        }
+
         /// <summary>
         /// SetLocal creates a local Random object for a current thread.
         /// </summary>

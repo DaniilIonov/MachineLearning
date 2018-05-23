@@ -33,6 +33,8 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -43,14 +45,19 @@
   <ItemGroup>
     <Compile Include="Classes\ExtensionMethods.cs" />
     <Compile Include="Classes\IOList.cs" />
+    <Compile Include="Classes\Matrix.cs" />
     <Compile Include="Classes\NeuralLayers.cs" />
     <Compile Include="Classes\NeuralNetwork.cs" />
+    <Compile Include="Classes\Operations.cs" />
     <Compile Include="Classes\Population.cs" />
     <Compile Include="Classes\Species.cs" />
     <Compile Include="Classes\ThreadSafeRandom.cs" />
     <Compile Include="Classes\Utilities.cs" />
+    <Compile Include="Interfaces\ICost.cs" />
     <Compile Include="Interfaces\INeuralLayer.cs" />
+    <Compile Include="Interfaces\IActivation.cs" />
     <Compile Include="Interfaces\IPopulation.cs" />
+    <Compile Include="Interfaces\IRegularization.cs" />
     <Compile Include="Interfaces\ISpecies.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -59,6 +66,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Misc\MachineLearningDiagram.cd" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Exceptions\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
