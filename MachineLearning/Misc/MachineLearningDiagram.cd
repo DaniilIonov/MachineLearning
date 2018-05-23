@@ -31,9 +31,9 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="MachineLearning.Population&lt;T&gt;" BaseTypeListCollapsed="true">
-    <Position X="29" Y="3.75" Width="7.25" />
+    <Position X="29" Y="4" Width="7.25" />
     <TypeIdentifier>
-      <HashCode>ABEASAABgCAKgFhEICRGACACEIAiAAAIggIEQAoBEAU=</HashCode>
+      <HashCode>ABEACAABgCAKgFhEICRGACACEIAiAAAIggIEQAoBEAU=</HashCode>
       <FileName>Classes\Population.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />

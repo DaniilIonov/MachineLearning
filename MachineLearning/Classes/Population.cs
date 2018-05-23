@@ -1,10 +1,14 @@
-﻿namespace MachineLearning
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace MachineLearning
 {
-    /*
     /// <summary>
     /// Represents a collection of <see cref="Species"/>. Contains methods and properties to evolve array of <see cref="Species"/> to maximize the <see cref="Species.Fitness"/> value.
     /// </summary>
     /// <typeparam name="T">Type must be derived from <see cref="Species"/> class. The constructor of type T must have the same parameters as a constructor of <see cref="Species"/>.</typeparam>
+    [Obsolete("The class in currently under development")]
     [Serializable]
     public class Population<T> : IPopulation<T> where T : Species
     {
@@ -105,7 +109,10 @@
         /// </summary>
         public Utilities.CrossoverType CrossoverType
         {
-            get { return this.crossoverType; }
+            get
+            {
+                return this.crossoverType;
+            }
             set
             {
                 switch (value)
@@ -143,7 +150,10 @@
         /// </summary>
         public Utilities.MutationType MutationType
         {
-            get { return this.mutationType; }
+            get
+            {
+                return this.mutationType;
+            }
             set
             {
                 switch (value)
@@ -269,7 +279,10 @@
 
         public IActivation Activation
         {
-            get { return this._activation; }
+            get
+            {
+                return this._activation;
+            }
             set
             {
                 if (value == null)
@@ -412,7 +425,7 @@
         {
             foreach (Species Member in this.Members) //For each Species in Population:
             {
-                Member.DNA = this.Mutation(this as IPopulation<ISpecies>, Member.DNA); //Changes the Weight of the Species by calling the MutateBrain method, that returns modified Weights list.
+                Member.DNA = this.Mutation(this as IPopulation<ISpecies>, Member.DNA.ToList()); //Changes the Weight of the Species by calling the MutateBrain method, that returns modified Weights list.
             }
         }
 
@@ -447,8 +460,8 @@
                 Species parentB = GetRandomSpecies();
 
                 //Saves DNA of each parent Species.
-                List<double> parentA_DNA = parentA.DNA;
-                List<double> parentB_DNA = parentB.DNA;
+                List<double> parentA_DNA = parentA.DNA.ToList();
+                List<double> parentB_DNA = parentB.DNA.ToList();
 
                 //Calls CreateChildren function to get new children from parents genome.
                 List<double>[] children = this.Crossover(parentA_DNA, parentB_DNA);
@@ -506,35 +519,35 @@
             }
         }
 
-        /// <summary>
-        /// Trains each <see cref="Species"/> to approach given correct output(s) based on input(s).
-        /// </summary>
-        /// <param name="Inputs">A single-dimensional array of <see cref="double"/>'s at which weights adjustments to be performed.</param>
-        /// <param name="CorrectOutputs">A single-dimensional array of <see cref="double"/>'s representing correct set of outputs for the given inputs.</param>
-        /// <param name="LearningRate">The magnitude by which each weight is to be changed.</param>
-        /// <param name="regulregularizationRate">The rate by wight L2 regularization occures. L2 regularization minimizes weights, so that all of them are close to 0.0.</param>
-        public void TrainSpecies(double[] Inputs, double[] CorrectOutputs, double LearningRate, double regulregularizationRate)
-        {
-            foreach (Species Member in this.Members) //For each Species in Population:
-            {
-                Member.Train(Inputs, CorrectOutputs, LearningRate, regulregularizationRate);    //Calls the Train() method of NeuralNetwork.
-            }
-        }
+        ///// <summary>
+        ///// Trains each <see cref="Species"/> to approach given correct output(s) based on input(s).
+        ///// </summary>
+        ///// <param name="Inputs">A single-dimensional array of <see cref="double"/>'s at which weights adjustments to be performed.</param>
+        ///// <param name="CorrectOutputs">A single-dimensional array of <see cref="double"/>'s representing correct set of outputs for the given inputs.</param>
+        ///// <param name="LearningRate">The magnitude by which each weight is to be changed.</param>
+        ///// <param name="regulregularizationRate">The rate by wight L2 regularization occures. L2 regularization minimizes weights, so that all of them are close to 0.0.</param>
+        //public void TrainSpecies(double[] Inputs, double[] CorrectOutputs, double LearningRate, double regulregularizationRate)
+        //{
+        //    foreach (Species Member in this.Members) //For each Species in Population:
+        //    {
+        //        Member.Train(Inputs, CorrectOutputs, LearningRate, regulregularizationRate);    //Calls the Train() method of NeuralNetwork.
+        //    }
+        //}
 
-        /// <summary>
-        /// Trains each <see cref="Species"/> to approach given correct input-output pairs from <see cref="IOList"/> parameter, with indicated batch size.
-        /// </summary>
-        /// <param name="IOSets">A list of input and correct output pairs.</param>
-        /// <param name="batchSize">Number of input-output pairs to be processed at once to improve generalization.</param>
-        /// <param name="LearningRate">The magnitude by which each weight is to be changed.</param>
-        /// <param name="regulregularizationRate">The rate by wight L2 regularization occures. L2 regularization minimizes weights, so that all of them are close to 0.0.</param>
-        public void TrainSpecies(IOList IOSets, int batchSize, double LearningRate, double regulregularizationRate)
-        {
-            foreach (Species Member in this.Members)
-            {
-                Member.Train(IOSets, batchSize, LearningRate, regulregularizationRate);    //Calls the Train() method of NeuralNetwork.
-            }
-        }
+        ///// <summary>
+        ///// Trains each <see cref="Species"/> to approach given correct input-output pairs from <see cref="IOList"/> parameter, with indicated batch size.
+        ///// </summary>
+        ///// <param name="IOSets">A list of input and correct output pairs.</param>
+        ///// <param name="batchSize">Number of input-output pairs to be processed at once to improve generalization.</param>
+        ///// <param name="LearningRate">The magnitude by which each weight is to be changed.</param>
+        ///// <param name="regulregularizationRate">The rate by wight L2 regularization occures. L2 regularization minimizes weights, so that all of them are close to 0.0.</param>
+        //public void TrainSpecies(IOList IOSets, int batchSize, double LearningRate, double regulregularizationRate)
+        //{
+        //    foreach (Species Member in this.Members)
+        //    {
+        //        Member.Train(IOSets, batchSize, LearningRate, regulregularizationRate);    //Calls the Train() method of NeuralNetwork.
+        //    }
+        //}
 
         /// <summary>
         /// Returns a string contining the <see cref="Population{T}.Size"/>.
@@ -545,5 +558,4 @@
             return $"The population size is {this.Size}";
         }
     }
-    */
 }
