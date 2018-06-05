@@ -14,7 +14,7 @@ namespace MachineLearning
     {
         private List<T> _members;
         private int _size;
-        private int[] _layersInfo;
+        private object[] _speciesParameters;
         private T _bestMember;
         private int _currentGeneration;
         private Utilities.CrossoverType crossoverType;
@@ -27,7 +27,6 @@ namespace MachineLearning
         private bool _isSorted;
         private bool _isNormalized;
         private bool _isFiltered;
-        private IActivation _activation;
 
         /// <summary>
         /// Represents a list of all <see cref="Species"/> objects, contained in <see cref="Population{T}"/> class, where T is derived from <see cref="Species"/>.
@@ -60,17 +59,17 @@ namespace MachineLearning
         }
 
         /// <summary>
-        /// Contains information about number of neurons in each layer, starting from input layer, ending with output layer.
+        /// Contains information about Species.
         /// </summary>
-        public int[] LayersInfo
+        public object[] SpeciesParameters
         {
             get
             {
-                return this._layersInfo;
+                return this._speciesParameters;
             }
             private set
             {
-                this._layersInfo = value;
+                this._speciesParameters = value;
             }
         }
 
@@ -170,7 +169,6 @@ namespace MachineLearning
                 this.mutationType = value;
             }
         }
-
 
         /// <summary>
         /// A mutation function to alter child genome.
@@ -277,48 +275,30 @@ namespace MachineLearning
             }
         }
 
-        public IActivation Activation
-        {
-            get
-            {
-                return this._activation;
-            }
-            set
-            {
-                if (value == null)
-                {
-                    value = new Identity();
-                }
-                this._activation = value;
-            }
-        }
-
-
         /// <summary>
         /// Initializes a new instance of <see cref="Population{T}"/>, where T is derived from <see cref="Species"/>, with indicated <see cref="Population{T}.Size"/> and structure of <see cref="NeuralNetworkOld"/>.
         /// </summary>
         /// <param name="Size">The number of <see cref="Species"/> that the new <see cref="Population{T}"/> will have.</param>
         /// <param name="activationFunction">One of the <see cref="Utilities.ActivationFunction"/>.</param>
-        /// <param name="LayersInfo">A list of number of neurons in each layer starting at input layer. Can be entered as an array of <see cref="int"/>'s, or comma-separated <see cref="int"/> values.</param>
-        public Population(int Size, params int[] LayersInfo)
+        /// <param name="speciesParams">Parameters used to create Species.</param>
+        public Population(int Size, params object[] speciesParams)
         {
             this.Size = Size;
-            this.LayersInfo = LayersInfo;
-            this.Activation = new Identity();
+            this.SpeciesParameters = speciesParams;
             this.CurrentGeneration = 1; //Resets the number of generations.
             this.MutationRate = 0.1; //Default value is 0.1.
             this.MaxMutationMagnitude = 0.5; //Defauld magnitude of mutation is +-50%.
             this.PercentToKeep = 0.5; //By default, only best performing half of population is breeding.
 
             this.Members = new List<T>();    //Initializes an emty list of Species.
-            this.BestMember = Activator.CreateInstance(typeof(T), new object[] { LayersInfo[0], LayersInfo[1], LayersInfo.ToList().GetRange(2, LayersInfo.Length - 2).ToArray() }) as T;    //Initializes an instance of <T> with the same parameters as Species constructor.
+            this.BestMember = Activator.CreateInstance(typeof(T), this.SpeciesParameters) as T;    //Initializes an instance of <T> with the same parameters as Species constructor.
 
             this.CrossoverType = Utilities.CrossoverType.SinglePoint; //Initializes default crossover type.
             this.MutationType = Utilities.MutationType.Gaussian;
 
             for (int speciesIndex = 0; speciesIndex < this.Size; speciesIndex++)    //Initializes the number of T Species specified in Size parameter.
             {
-                this.Members.Add(Activator.CreateInstance(typeof(T), new object[] { LayersInfo[0], LayersInfo[1], LayersInfo.ToList().GetRange(2, LayersInfo.Length - 2).ToArray() }) as T);    //Initializes an instance of <T> with the same parameters as Species constructor.
+                this.Members.Add(Activator.CreateInstance(typeof(T), this.SpeciesParameters) as T);    //Initializes an instance of <T> with the same parameters as Species constructor.
             }
         }
 
@@ -423,9 +403,10 @@ namespace MachineLearning
         /// </summary>
         public void MutateSpecies()
         {
+            IPopulation<ISpecies> currentPopulation = this as IPopulation<ISpecies>;
             foreach (Species Member in this.Members) //For each Species in Population:
             {
-                Member.DNA = this.Mutation(this as IPopulation<ISpecies>, Member.DNA.ToList()); //Changes the Weight of the Species by calling the MutateBrain method, that returns modified Weights list.
+                Member.DNA = this.Mutation(currentPopulation, Member.DNA.ToList()); //Changes the Weight of the Species by calling the MutateBrain method, that returns modified Weights list.
             }
         }
 
@@ -474,8 +455,8 @@ namespace MachineLearning
                 child2_DNA = this.Mutation(this as IPopulation<ISpecies>, child2_DNA);
 
                 //Appends new instances of Species based on DNA of newly creaded children/Species to the newPopulation.
-                newPopulation.Add(Activator.CreateInstance(typeof(T), new object[] { this.LayersInfo[0], this.LayersInfo[1], this.LayersInfo.ToList().GetRange(2, this.LayersInfo.Length - 2).ToArray(), child1_DNA }) as T);
-                newPopulation.Add(Activator.CreateInstance(typeof(T), new object[] { this.LayersInfo[0], this.LayersInfo[1], this.LayersInfo.ToList().GetRange(2, this.LayersInfo.Length - 2).ToArray(), child2_DNA }) as T);
+                newPopulation.Add(Activator.CreateInstance(typeof(T), this.SpeciesParameters) as T);
+                newPopulation.Add(Activator.CreateInstance(typeof(T), this.SpeciesParameters) as T);
             }
 
             newPopulation = newPopulation.GetRange(0, this.Size);    //Constraints the size of newPopulatio to be exactly the targer Population Size.
@@ -483,7 +464,6 @@ namespace MachineLearning
             this.Members.Clear();
             this.Members.InsertRange(0, newPopulation);
             ResetFitness();
-            //Members = newPopulation;    //Replaces old Members with new ones.
 
             this.CurrentGeneration++;   //Increments number of generations by 1.
 
@@ -501,15 +481,14 @@ namespace MachineLearning
         {
             while (this.Members.Count > (this.Size * this.PercentToKeep) && this.Members.Count > 2)    //Kills worst performing half of population based on their Fitness.
             {
-                //Members.Remove(GetRandomSpecies(false));    //Removes probabily based chosen Species from List of Members.
-                this.Members.Remove(this.Members.First());    //Removes probabily based chosen Species from List of Members.
+                this.Members.Remove(this.Members.First());    //Removes worst performing species.
             }
 
             this.IsFiltered = true;
         }
 
         /// <summary>
-        /// Sets all values of fitness to be 0.
+        /// Sets all values of fitness to 0.
         /// </summary>
         public void ResetFitness()
         {
@@ -518,36 +497,6 @@ namespace MachineLearning
                 Member.Fitness = 0;
             }
         }
-
-        ///// <summary>
-        ///// Trains each <see cref="Species"/> to approach given correct output(s) based on input(s).
-        ///// </summary>
-        ///// <param name="Inputs">A single-dimensional array of <see cref="double"/>'s at which weights adjustments to be performed.</param>
-        ///// <param name="CorrectOutputs">A single-dimensional array of <see cref="double"/>'s representing correct set of outputs for the given inputs.</param>
-        ///// <param name="LearningRate">The magnitude by which each weight is to be changed.</param>
-        ///// <param name="regulregularizationRate">The rate by wight L2 regularization occures. L2 regularization minimizes weights, so that all of them are close to 0.0.</param>
-        //public void TrainSpecies(double[] Inputs, double[] CorrectOutputs, double LearningRate, double regulregularizationRate)
-        //{
-        //    foreach (Species Member in this.Members) //For each Species in Population:
-        //    {
-        //        Member.Train(Inputs, CorrectOutputs, LearningRate, regulregularizationRate);    //Calls the Train() method of NeuralNetwork.
-        //    }
-        //}
-
-        ///// <summary>
-        ///// Trains each <see cref="Species"/> to approach given correct input-output pairs from <see cref="IOList"/> parameter, with indicated batch size.
-        ///// </summary>
-        ///// <param name="IOSets">A list of input and correct output pairs.</param>
-        ///// <param name="batchSize">Number of input-output pairs to be processed at once to improve generalization.</param>
-        ///// <param name="LearningRate">The magnitude by which each weight is to be changed.</param>
-        ///// <param name="regulregularizationRate">The rate by wight L2 regularization occures. L2 regularization minimizes weights, so that all of them are close to 0.0.</param>
-        //public void TrainSpecies(IOList IOSets, int batchSize, double LearningRate, double regulregularizationRate)
-        //{
-        //    foreach (Species Member in this.Members)
-        //    {
-        //        Member.Train(IOSets, batchSize, LearningRate, regulregularizationRate);    //Calls the Train() method of NeuralNetwork.
-        //    }
-        //}
 
         /// <summary>
         /// Returns a string contining the <see cref="Population{T}.Size"/>.

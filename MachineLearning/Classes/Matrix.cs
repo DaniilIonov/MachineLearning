@@ -5,7 +5,7 @@ using System.Linq;
 namespace MachineLearning
 {
     [Serializable]
-    public class Matrix : ICloneable //Description of matrix operations from en.wikipedia.org/wiki/Matrix_(mathematics)
+    public class Matrix : ICloneable, IEquatable<object> //Description of matrix operations from en.wikipedia.org/wiki/Matrix_(mathematics)
     {
         private int[] _dimensions;
 
@@ -105,16 +105,6 @@ namespace MachineLearning
 
             this._data = new double[length];
         }
-
-        //public Matrix Map(Utilities.ActivationFunctionDelegate func)
-        //{
-        //    for (int index = 0; index < this.Data.Length; index++)
-        //    {
-        //        this.Data[index] = func(this.Data[index]);
-        //    }
-
-        //    return this;
-        //}
 
         public Matrix Map(Func<double, double> func)
         {
@@ -988,6 +978,47 @@ namespace MachineLearning
             {
                 Data = matrix.Data.ToArray()
             };
+        }
+
+        // override object.Equals
+        public override bool Equals(object obj)
+        {
+            if (obj == null || GetType() != obj.GetType())
+            {
+                return false;
+            }
+            else
+            {
+                Matrix toCompare = obj as Matrix;
+
+                return this.Data.SequenceEqual(toCompare.Data) && this.Dimensions.SequenceEqual(toCompare.Dimensions);
+            }
+        }
+
+        public static bool operator ==(Matrix left, Matrix right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(Matrix left, Matrix right)
+        {
+            return !left.Equals(right);
+        }
+
+        // override object.GetHashCode
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                const int HashingBase = 7655413;
+                const int HashingMultiplier = 124693;
+
+                int hash = HashingBase;
+                hash = (hash * HashingMultiplier) ^ (!(this.Data is null) ? this.Data.GetHashCode() : 0);
+                hash = (hash * HashingMultiplier) ^ (!(this.Dimensions is null) ? this.Dimensions.GetHashCode() : 0);
+
+                return hash;
+            }
         }
     }
 }

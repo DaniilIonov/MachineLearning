@@ -1,0 +1,214 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="MachineLearning.ExtensionMethods" Collapsed="true">
+    <Position X="4" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAA=</HashCode>
+      <FileName>Classes\ExtensionMethods.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MachineLearning.IOList" Collapsed="true">
+    <Position X="0.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAAAAAEAAAAAAQAAAAAAAAAAAAAAAAAEAA=</HashCode>
+      <FileName>Classes\IOList.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MachineLearning.Matrix" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="0.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CEAgCAAABBAEAEEUaBUhAAOAAIKBABgQKAwQIBhIDDA=</HashCode>
+      <FileName>Classes\Matrix.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="MachineLearning.FullyConnectedLayer" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="5.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>JAAAkAIAAAJAAQkEIAAAAgCEEAAQKACAAGAAAACAEBA=</HashCode>
+      <FileName>Classes\NeuralLayers.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="MachineLearning.ConvolutionalLayer" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAkAIACANAAAkEIIgAAgCAEBAQCAmAACAAAACAEBA=</HashCode>
+      <FileName>Classes\NeuralLayers.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="MachineLearning.NeuralNetwork" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="2.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IEAAAAIRgCAAAAEAIAAAAhCAAIAACACEAAAAQEACEBA=</HashCode>
+      <FileName>Classes\NeuralNetwork.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="MachineLearning.NoRegularization" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="4" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAEAAABAQAAAAACAIAACAAAAAAAQAAAAAAABA=</HashCode>
+      <FileName>Classes\Operations.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="MachineLearning.L1Regularization" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="2.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAEAAABAQAAAAACAIAACAAAAAAAQAAAAAAABA=</HashCode>
+      <FileName>Classes\Operations.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="MachineLearning.L2Regularization" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="4" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAEAAABAQAAAAACAIAACAAAAAAAQAAAAAAABA=</HashCode>
+      <FileName>Classes\Operations.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="MachineLearning.QuadraticCost" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="7.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAEAAABAQBAAAAAAIAAAAAAAAAAQAAAAAAABA=</HashCode>
+      <FileName>Classes\Operations.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="MachineLearning.CrossEntropyCost" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="2.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAEAAABAQBAAAAAAIAAAAAAAAAAQAAAAAAABA=</HashCode>
+      <FileName>Classes\Operations.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="MachineLearning.Identity" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="7.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAEAAAAAQAAAAAAAIAAAAAAAAAAQAAAAAAABA=</HashCode>
+      <FileName>Classes\Operations.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="MachineLearning.Logistic" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="7.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAEAAAAAQAAAAAAAIAAAAAAAAAAQAAAAAAABA=</HashCode>
+      <FileName>Classes\Operations.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="MachineLearning.TanH" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="7.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAEAAAAAQAAAAAAAIAAAAAAAAAAQAAAAAAABA=</HashCode>
+      <FileName>Classes\Operations.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="MachineLearning.ReLU" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="0.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAEAAAAAQAAAAAAAIAAAAAAAAAAQAAAAAAABA=</HashCode>
+      <FileName>Classes\Operations.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="MachineLearning.LeakyReLU" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="5.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAEAAAAAQAAAAAAAIAAAAAAAAAAQAAAAAAABA=</HashCode>
+      <FileName>Classes\Operations.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="MachineLearning.Population&lt;T&gt;" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="5.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABEACAAAgCAKgFBEICRGACACEMAiAAAIggIEAAoJAAU=</HashCode>
+      <FileName>Classes\Population.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="MachineLearning.Species" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="5.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAgAAAACACEAAAAAAAAAAEAAAAAAAAAAAAAABA=</HashCode>
+      <FileName>Classes\Species.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="MachineLearning.ThreadSafeRandom" Collapsed="true">
+    <Position X="0.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgBAAAAAAAAAAAAAAAAAAIAAAAAAAAAAACAAAAAACAA=</HashCode>
+      <FileName>Classes\ThreadSafeRandom.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MachineLearning.Utilities" Collapsed="true">
+    <Position X="2.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ADAAAAAACFAAACAIAABBAAAChAAAAABBACACBCABAAA=</HashCode>
+      <FileName>Classes\Utilities.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MachineLearning.Properties.Resources" Collapsed="true">
+    <Position X="2.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAABEAAAAQAAAAAAAAAAAAAAAIA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MachineLearning.Properties.Settings" Collapsed="true">
+    <Position X="4" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAABAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="MachineLearning.IActivation" Collapsed="true">
+    <Position X="0.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAEAAAAAAAAAAAAAIAAAAAAAAAAQAAAAAAAAA=</HashCode>
+      <FileName>Interfaces\IActivation.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="MachineLearning.ICost" Collapsed="true">
+    <Position X="2.25" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAEAAABAABAAAAAAIAAAAAAAAAAQAAAAAAAAA=</HashCode>
+      <FileName>Interfaces\ICost.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="MachineLearning.INeuralLayer" Collapsed="true">
+    <Position X="4" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAIAAAAAAAEAAAAAAgAAAAAQAACAAAAAAAAAEAA=</HashCode>
+      <FileName>Interfaces\INeuralLayer.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="MachineLearning.IPopulation&lt;T&gt;" Collapsed="true">
+    <Position X="5.75" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAACAAgAAAAABAAAACAIACAAAAAAAEAAgAAAE=</HashCode>
+      <FileName>Interfaces\IPopulation.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="MachineLearning.IRegularization" Collapsed="true">
+    <Position X="7.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAEAAABAAAAAAACAIAAAAAAAAAAQAAAAAAAAA=</HashCode>
+      <FileName>Interfaces\IRegularization.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="MachineLearning.ISpecies" Collapsed="true">
+    <Position X="0.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Interfaces\ISpecies.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

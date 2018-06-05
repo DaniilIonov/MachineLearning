@@ -17,16 +17,11 @@ namespace MachineLearning
         }
 
         /// <summary>
-        /// Represents a sinle-dimensional array/list of <see cref="System.Double"/>'s, containing all weights of <see cref="NeuralNetworkOld"/> in sequence.
+        /// Represents a sinle-dimensional array/list of <see cref="System.Double"/>'s, containing all data of <see cref="NeuralNetwork"/> in sequence. Can be used to store or load data.
         /// </summary>
         IList<double> DNA
         {
             get; set;
         }
-
-        ///// <summary>
-        ///// Represents a sinle-dimensional array/list of <see cref="System.Double"/>'s, containing all weights of <see cref="NeuralNetworkOld"/> in sequence.
-        ///// </summary>
-        //void SetDNA(List<double> value);
     }
 }

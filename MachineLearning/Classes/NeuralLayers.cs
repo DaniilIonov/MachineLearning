@@ -14,8 +14,6 @@ namespace MachineLearning
         private IRegularization _regularization = new NoRegularization();
         private Matrix _inputs;
         private Matrix _outputs;
-        private Matrix _gradients;
-        private Matrix _deltaWeights;
         private Matrix _error;
 
         public int[] InputDimensions
@@ -126,30 +124,6 @@ namespace MachineLearning
             }
         }
 
-        public Matrix Gradients
-        {
-            get
-            {
-                return this._gradients;
-            }
-            private set
-            {
-                this._gradients = value;
-            }
-        }
-
-        public Matrix DeltaWeights
-        {
-            get
-            {
-                return this._deltaWeights;
-            }
-            private set
-            {
-                this._deltaWeights = value;
-            }
-        }
-
         public IList<double> FlatData
         {
             get
@@ -176,7 +150,8 @@ namespace MachineLearning
 
             this.Biases = new Matrix(this.OutputDimensions);
             int[] weightsDimensions = Matrix.GenerateInfoForMatrixMultiplication(this.OutputDimensions, this.InputDimensions).Item1;
-            Randomize();
+            this.Weights = new Matrix(weightsDimensions);
+            //Randomize();
         }
 
         public FullyConnectedLayer(int inputs, int outputs)
@@ -187,7 +162,7 @@ namespace MachineLearning
             this.Biases = new Matrix(this.OutputDimensions);
             int[] weightsDimensions = Matrix.GenerateInfoForMatrixMultiplication(this.OutputDimensions, this.InputDimensions).Item1;
             this.Weights = new Matrix(weightsDimensions);
-            Randomize();
+            //Randomize();
         }
 
         public FullyConnectedLayer Randomize()
@@ -207,20 +182,17 @@ namespace MachineLearning
             return this.Outputs.Clone() as Matrix;
         }
 
-        public Matrix BackPropagation(Matrix error)
+        public Matrix BackPropagation(Matrix error, double learningRate, double regularizationRate)
         {
             this.Error = error.Clone() as Matrix;
-            this.Gradients = (this.Outputs.Clone() as Matrix).Map((double value) => this.Activation.Function(value));
-            this.Gradients ^= this.Error;
+            Matrix propError = !this.Weights * this.Error;
 
-            this.DeltaWeights = this.Gradients * !this.Inputs;
+            Matrix gradients = (this.Outputs.Clone() as Matrix).Map((double value) => this.Activation.Function(value));
+            gradients ^= this.Error;
 
-            return !this.Weights * this.Error;
-        }
+            Matrix deltaWeights = gradients * !this.Inputs;
 
-        public void CorrectWeights(double learningRate, double regularizationRate)
-        {
-            this.Biases -= (this.Gradients * learningRate);
+            this.Biases -= (gradients * learningRate);
 
             Matrix regularization = (this.Weights.Clone() as Matrix).Map((double weight) =>
             {
@@ -228,7 +200,9 @@ namespace MachineLearning
                 return this.Regularization.Derivative(weight);
             });
 
-            this.Weights -= (this.DeltaWeights + (regularization * regularizationRate)) * learningRate;
+            this.Weights -= (deltaWeights + (regularization * regularizationRate)) * learningRate;
+
+            return propError;
         }
 
         public object Clone()
@@ -241,8 +215,6 @@ namespace MachineLearning
                 Regularization = this.Regularization.Clone() as IRegularization,
                 Inputs = this.Inputs.Clone() as Matrix,
                 Outputs = this.Outputs.Clone() as Matrix,
-                Gradients = this.Gradients.Clone() as Matrix,
-                DeltaWeights = this.DeltaWeights.Clone() as Matrix,
                 Error = this.Error.Clone() as Matrix
             };
         }
@@ -261,8 +233,6 @@ namespace MachineLearning
         private Matrix _output;
         private int[] _filterOutputDimensions;
         private Matrix[] _filterOutputs;
-        private Matrix[] _deltaWeights;
-        private Matrix[] _gradients;
 
         public IRegularization Regularization
         {
@@ -386,7 +356,7 @@ namespace MachineLearning
             }
         }
 
-        public Matrix Outputs
+        public Matrix Output
         {
             get
             {
@@ -395,30 +365,6 @@ namespace MachineLearning
             private set
             {
                 this._output = value;
-            }
-        }
-
-        public Matrix[] Gradients
-        {
-            get
-            {
-                return this._gradients;
-            }
-            private set
-            {
-                this._gradients = value;
-            }
-        }
-
-        public Matrix[] DeltaWeights
-        {
-            get
-            {
-                return this._deltaWeights;
-            }
-            private set
-            {
-                this._deltaWeights = value;
             }
         }
 
@@ -432,8 +378,6 @@ namespace MachineLearning
             this.Filters = new Matrix[this.NumOfFilters];
             this.Biases = new Matrix[this.NumOfFilters];
             this._filterOutputs = new Matrix[this.NumOfFilters];
-            this.DeltaWeights = new Matrix[this.NumOfFilters];
-            this.Gradients = new Matrix[this.NumOfFilters];
 
             for (int filterIndex = 0; filterIndex < this.NumOfFilters; filterIndex++)
             {
@@ -475,12 +419,12 @@ namespace MachineLearning
                 this._filterOutputs[filterIndex] = filterOutput;
             }
 
-            this.Outputs = new Matrix(this.OutputDimensions).PopulateFromFlatData(flatOutput.ToArray());
+            this.Output = new Matrix(this.OutputDimensions).PopulateFromFlatData(flatOutput.ToArray());
 
-            return this.Outputs.Clone() as Matrix;
+            return this.Output.Clone() as Matrix;
         }
 
-        public Matrix BackPropagation(Matrix error)
+        public Matrix BackPropagation(Matrix error, double learningRate, double regularizationRate)
         {
             Matrix propagatedErrors = new Matrix(this.InputDimensions);
             for (int filterIndex = 0; filterIndex < this.NumOfFilters; filterIndex++)
@@ -490,22 +434,13 @@ namespace MachineLearning
 
                 Matrix filterGradient = (this._filterOutputs[filterIndex].Clone() as Matrix).Map((double val) => this.Activation.Derivative(val));
                 filterGradient ^= filterError;
-                this.Gradients[filterIndex] = filterGradient;
 
-                this.DeltaWeights[filterIndex] = this.Input % filterGradient;
+                Matrix DeltaWeights = this.Input % filterGradient;
 
                 Matrix propEr = Matrix.PrepareMatrixForFullConvolution(filterGradient, this.Filters[filterIndex]) % this.Filters[filterIndex];
                 propagatedErrors += propEr;
-            }
 
-            return propagatedErrors;
-        }
-
-        public void CorrectWeights(double learningRate, double regularizationRate)
-        {
-            for (int filterIndex = 0; filterIndex < this.NumOfFilters; filterIndex++)
-            {
-                this.Biases[filterIndex] -= (this.Gradients[filterIndex] * learningRate);
+                this.Biases[filterIndex] -= (filterGradient * learningRate);
 
                 Matrix regularization = (this.Filters[filterIndex].Clone() as Matrix).Map((double value) =>
                 {
@@ -513,8 +448,128 @@ namespace MachineLearning
                     return this.Regularization.Derivative(value);
                 });
 
-                this.Filters[filterIndex] -= (this.DeltaWeights[filterIndex] + (regularization * regularizationRate)) * learningRate;
+                this.Filters[filterIndex] -= (DeltaWeights + (regularization * regularizationRate)) * learningRate;
             }
+
+            return propagatedErrors;
+        }
+
+        public object Clone()
+        {
+            ConvolutionalLayer convolutionalLayer = new ConvolutionalLayer(this.InputDimensions, this.OutputDimensions, this.NumOfFilters)
+            {
+                Regularization = this.Regularization.Clone() as IRegularization,
+                Activation = this.Activation.Clone() as IActivation,
+                Input = this.Input.Clone() as Matrix,
+                Output = this.Output.Clone() as Matrix,
+                _filterOutputDimensions = this._filterOutputDimensions.ToArray(),
+            };
+
+            for (int filterIndex = 0; filterIndex < this.NumOfFilters; filterIndex++)
+            {
+                convolutionalLayer.Filters[filterIndex].PopulateFromFlatData(this.Filters[filterIndex].Data);
+                convolutionalLayer.Biases[filterIndex].PopulateFromFlatData(this.Biases[filterIndex].Data);
+                convolutionalLayer._filterOutputs[filterIndex] = this._filterOutputs[filterIndex].Clone() as Matrix;
+            }
+
+            return convolutionalLayer;
+        }
+    }
+
+    public class SoftMaxLayer : INeuralLayer
+    {
+        private int[] _inputDimensions;
+        private int[] _outputDimensions;
+        private IRegularization _regularization;
+        private IList<double> _flatData;
+        private Matrix _output;
+
+        public IRegularization Regularization
+        {
+            get
+            {
+                return this._regularization;
+            }
+            set
+            {
+                this._regularization = value;
+            }
+        }
+        public IList<double> FlatData
+        {
+            get
+            {
+                return this._flatData;
+            }
+            set
+            {
+                this._flatData = value;
+            }
+        }
+        public int[] InputDimensions
+        {
+            get
+            {
+                return this._inputDimensions;
+            }
+            set
+            {
+                this._inputDimensions = value;
+            }
+        }
+        public int[] OutputDimensions
+        {
+            get
+            {
+                return this._outputDimensions;
+            }
+            set
+            {
+                this._outputDimensions = value;
+            }
+        }
+
+        public Matrix Output
+        {
+            get
+            {
+                return this._output;
+            }
+            private set
+            {
+                this._output = value;
+            }
+        }
+
+        public SoftMaxLayer(params int[] inputDimensions)
+        {
+            this.InputDimensions = inputDimensions.ToArray();
+            this.OutputDimensions = inputDimensions.ToArray();
+            this.Regularization = new NoRegularization();
+            this.FlatData = new double[0];
+        }
+
+        public Matrix FeedForward(Matrix inputs)
+        {
+            this.Output = inputs.Clone() as Matrix;
+
+            this.Output.Map((double val) =>
+            {
+                return Math.Exp(val);
+            });
+
+            this.Output /= this.Output.Data.Sum();
+
+            return this.Output;
+        }
+
+        public Matrix BackPropagation(Matrix error, double learningRate, double regularizationRate)
+        {
+            return (error.Clone() as Matrix).Map((double val, int[] coords) =>
+            {
+                double smPredicted = this.Output[coords];
+                return val * smPredicted * (1.0 - smPredicted);
+            });
         }
 
         public object Clone()

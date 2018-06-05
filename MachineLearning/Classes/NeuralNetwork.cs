@@ -55,7 +55,7 @@ namespace MachineLearning
             }
             set
             {
-                IRegularization regularization = value == null ? new NoRegularization() : value;
+                IRegularization regularization = value ?? new NoRegularization();
                 foreach (INeuralLayer layer in this.Layers)
                 {
                     layer.Regularization = regularization;
@@ -128,13 +128,10 @@ namespace MachineLearning
             }
         }
 
-
         public NeuralNetwork()
         {
             this.LayersInfo = new int[0][];
             InitializeLayers();
-            this.CostType = Utilities.CostType.Quadratic;
-            this.RegularizationType = Utilities.RegularizationType.None;
         }
 
         public NeuralNetwork(params int[] layersInfo)
@@ -151,8 +148,6 @@ namespace MachineLearning
             }
 
             InitializeLayers();
-            this.CostType = Utilities.CostType.Quadratic;
-            this.RegularizationType = Utilities.RegularizationType.None;
         }
 
         public NeuralNetwork(params int[][] layersInfo)
@@ -169,9 +164,6 @@ namespace MachineLearning
             }
 
             InitializeLayers();
-
-            this.CostType = Utilities.CostType.Quadratic;
-            this.RegularizationType = Utilities.RegularizationType.None;
         }
 
         private void InitializeLayers()
@@ -181,6 +173,8 @@ namespace MachineLearning
             {
                 this.Layers.Add(new FullyConnectedLayer(this.LayersInfo[layerIndex], this.LayersInfo[layerIndex + 1]).Randomize());
             }
+            this.CostType = Utilities.CostType.Quadratic;
+            this.RegularizationType = Utilities.RegularizationType.None;
         }
 
         public Matrix FeedForward(Matrix input)
@@ -206,16 +200,10 @@ namespace MachineLearning
                 return this.Cost.Derivative(predictedOutput[coords], correctOutput[coords]);
             });
 
+            this.Regularization.Reset();
             for (int layerIndex = this.Layers.Count - 1; layerIndex >= 0; layerIndex--)
             {
-                error = this.Layers[layerIndex].BackPropagation(error);
-            }
-
-            this.Regularization.Reset();
-
-            foreach (INeuralLayer layer in this.Layers)
-            {
-                layer.CorrectWeights(learningRate, regularizationRate);
+                error = this.Layers[layerIndex].BackPropagation(error, learningRate, regularizationRate);
             }
         }
 
@@ -234,11 +222,12 @@ namespace MachineLearning
         public void SetFromFlatData(IList<double> data)
         {
             int index = 0, numOfElements = 0;
+            List<double> dataL = data.ToList();
 
             foreach (INeuralLayer layer in this.Layers)
             {
                 numOfElements = layer.FlatData.Count;
-                layer.FlatData = data.ToList().GetRange(index, numOfElements);
+                layer.FlatData = dataL.GetRange(index, numOfElements);
                 index += numOfElements;
             }
         }
